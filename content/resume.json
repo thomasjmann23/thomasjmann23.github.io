@@ -1,0 +1,480 @@
+{
+  "name": "Thomas Jefferies Mann",
+  "shortName": "Thomas Mann",
+  "headline": "I build AI systems for credit and lending",
+  "location": "Greenville, SC",
+  "summary": "I started as an SBA credit specialist underwriting loans, then automated my way into building the bank's AI systems: LLM email triage for the lending inbox, competitor intelligence on SEC filings, and pipelines that draft credit memos with a human in the loop. I work between executives, developers and operations, turning what each of them needs into specs and working software.",
+  "focus": [
+    "AI in banking & credit",
+    "AI governance",
+    "How people adopt (and misuse) AI tools"
+  ],
+  "contact": {
+    "email": "thomasjmann23@gmail.com",
+    "linkedin": "https://www.linkedin.com/in/thomasjmann23",
+    "github": "https://github.com/thomasjmann23"
+  },
+  "experience": [
+    {
+      "id": "fbotl",
+      "org": "First Bank of the Lake",
+      "place": "Greenville, SC",
+      "role": "AVP, Credit Data Scientist",
+      "start": "May 2023",
+      "end": "Present",
+      "progression": [
+        "SBA Credit Specialist",
+        "SBA Senior Credit Specialist",
+        "SBA Credit Automation Consultant",
+        "AVP, Credit Data Scientist"
+      ],
+      "highlights": [
+        "Internal AI consultant on a ground-up Loan Origination System rebuild, turning executive, developer and operations needs into specs.",
+        "Built an LLM email triage system for the Chief Lending Officer's inbox, which receives 1,000+ messages a day.",
+        "Built a competitor intelligence app on SEC filings with LangChain, FAISS, Gemini and RAG.",
+        "Advised executives on AI governance, leading to a company-wide policy restricting non-enterprise LLMs.",
+        "Led an intern team building LLM pipelines for automated credit memo drafting, with human-in-the-loop review.",
+        "Integrated OCR for tax document extraction in SBA loan workflows.",
+        "Automated loan portfolio changes and insight reporting.",
+        "Earlier: underwrote SBA 7(a) and 7(a) Small loans; managed reapprovals, change memos and commitment letters; automated document generation with VBA."
+      ],
+      "award": "2023 Rookie of the Year",
+      "skills": [
+        "Python",
+        "SQL",
+        "VBA",
+        "LLM integration",
+        "RAG",
+        "FAISS",
+        "LangChain",
+        "OCR",
+        "AI governance",
+        "Credit underwriting"
+      ]
+    },
+    {
+      "id": "zions",
+      "org": "Zions Bancorporation",
+      "place": "Salt Lake City, UT",
+      "role": "Operational Risk Management Intern",
+      "start": "May 2022",
+      "end": "Aug 2022",
+      "highlights": [
+        "Streamlined risk acceptance and escalation workflows with VBA dashboards, reports and Tableau."
+      ],
+      "skills": [
+        "VBA",
+        "Tableau"
+      ]
+    },
+    {
+      "id": "wildhorn",
+      "org": "Wildhorn Outfitters",
+      "place": "Salt Lake City, UT",
+      "role": "Data Analyst",
+      "start": "May 2020",
+      "end": "Sep 2021",
+      "highlights": [
+        "Built a product analyzer and demand forecast model in Python and VBA to assess competition, ease of rank and product profitability."
+      ],
+      "skills": [
+        "Python",
+        "VBA"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "school": "IE University",
+      "place": "Madrid",
+      "degree": "Master in Business Analytics & Data Science",
+      "detail": "Advanced AI specialization · ML, MLOps, NLP, Generative AI, Reinforcement Learning, Deep Learning, ML in the Cloud (AWS)",
+      "start": "Sep 2024",
+      "end": "Jul 2025"
+    },
+    {
+      "school": "University of St Andrews",
+      "place": "Scotland",
+      "degree": "BSc (Hons) Management",
+      "detail": "Emphasis in Statistics",
+      "start": "Sep 2019",
+      "end": "Jun 2023"
+    }
+  ],
+  "skills": {
+    "Languages": [
+      "Python",
+      "SQL",
+      "JavaScript",
+      "VBA",
+      "HTML/CSS"
+    ],
+    "ML & DL": [
+      "PyTorch",
+      "TensorFlow",
+      "Keras",
+      "scikit-learn",
+      "LangChain"
+    ],
+    "Generative AI": [
+      "RAG",
+      "LLM integration",
+      "Fine-tuning",
+      "Prompt engineering",
+      "OCR"
+    ],
+    "Data & infra": [
+      "AWS",
+      "Docker",
+      "PostgreSQL",
+      "MySQL",
+      "FAISS",
+      "Streamlit",
+      "Tableau",
+      "Power BI",
+      "Git",
+      "REST APIs"
+    ]
+  },
+  "projects": [
+    {
+      "name": "DeepDiligence",
+      "tagline": "Ask questions across SEC filings",
+      "description": "Streamlit app that pulls 10-K filings from SEC EDGAR, chunks and embeds them into a FAISS index, and answers natural-language questions with Gemini through LangChain. Compares filings from one company over time or across several companies.",
+      "skills": [
+        "Python",
+        "RAG",
+        "LangChain",
+        "FAISS",
+        "Streamlit",
+        "LLM integration"
+      ],
+      "repo": "https://github.com/thomasjmann23/DeepDiligence",
+      "demo": "https://deepdiligence.streamlit.app/",
+      "flow": [
+        "Fetch",
+        "Chunk",
+        "Embed",
+        "Retrieve & answer"
+      ],
+      "id": "deepdiligence",
+      "repoPublic": false,
+      "problem": "Reading 10-Ks to compare competitors is slow, and keyword search misses the answer when the wording differs.",
+      "steps": [
+        {
+          "title": "Fetch",
+          "text": "Pull filing lists and documents for one or more companies from the SEC EDGAR API, validating CIKs."
+        },
+        {
+          "title": "Chunk",
+          "text": "Clean the HTML and split each filing into overlapping text chunks."
+        },
+        {
+          "title": "Embed",
+          "text": "Embed chunks with Gemini embeddings into a FAISS vector index, one index across all selected filings."
+        },
+        {
+          "title": "Retrieve & answer",
+          "text": "For each question, retrieve the most relevant chunks and have Gemini answer through a LangChain QA chain, with sources shown."
+        }
+      ],
+      "featured": true
+    },
+    {
+      "name": "SEC Filing Analyzer",
+      "tagline": "API for parsing SEC filings and XBRL",
+      "description": "FastAPI backend that fetches 10-K and 10-Q filings, parses HTML sections and inline XBRL financial data, stores them in a database and processes filings in the background for AI analysis with Gemini.",
+      "skills": [
+        "Python",
+        "SQL",
+        "LLM integration"
+      ],
+      "repo": "https://github.com/thomasjmann23/sec-edgar-app",
+      "flow": [
+        "Collect",
+        "Parse",
+        "Store",
+        "Serve"
+      ],
+      "id": "sec-filing-analyzer",
+      "repoPublic": false,
+      "problem": "Filings are long HTML documents with financial data buried in inline XBRL; analysis needs them structured first.",
+      "steps": [
+        {
+          "title": "Collect",
+          "text": "An SEC client fetches the latest 10-K and 10-Q filings for tracked companies."
+        },
+        {
+          "title": "Parse",
+          "text": "Parsers extract HTML sections and inline XBRL financial facts, with chart standardisation."
+        },
+        {
+          "title": "Store",
+          "text": "SQLAlchemy models store companies, filings and parsed sections."
+        },
+        {
+          "title": "Serve",
+          "text": "A FastAPI REST API exposes the data and runs parsing and Gemini analysis in the background."
+        }
+      ],
+      "featured": true
+    },
+    {
+      "name": "SBA FOIA Analyzer",
+      "tagline": "SBA loan data by industry",
+      "description": "Command-line tool that loads public SBA 7(a) and 504 loan data, filters it by NAICS code or description, and produces summaries, state maps, time series, Excel output and PDF or Word reports.",
+      "skills": [
+        "Python"
+      ],
+      "repo": "https://github.com/thomasjmann23/sba-foia",
+      "flow": [
+        "Load",
+        "Filter",
+        "Analyze",
+        "Report"
+      ],
+      "id": "sba-foia-analyzer",
+      "repoPublic": false,
+      "problem": "Public SBA loan data is large and organised by NAICS code, which makes industry questions awkward to answer quickly.",
+      "steps": [
+        {
+          "title": "Load",
+          "text": "Pull 7(a) and 504 datasets straight from data.sba.gov."
+        },
+        {
+          "title": "Filter",
+          "text": "Match by NAICS code prefix or search descriptions, optionally active loans only."
+        },
+        {
+          "title": "Analyze",
+          "text": "Summary metrics plus state, regional, time-series and NAICS breakdowns."
+        },
+        {
+          "title": "Report",
+          "text": "Interactive Plotly charts, Excel output, and PDF or Word reports."
+        }
+      ]
+    },
+    {
+      "name": "Equity Injection Tracker",
+      "tagline": "Sourcing funds for loan closings",
+      "description": "Concept app for loan officers and closing teams: a ledger of equity injection spending, invoices and bank statements attached to each line, sourced/unsourced totals, a drafted borrower email for missing documents, and a one-click closing-package PDF. Ships with generated demo data.",
+      "skills": [
+        "Python",
+        "Streamlit"
+      ],
+      "repo": "https://github.com/thomasjmann23/Equity-Injection-Concept",
+      "flow": [
+        "Ledger",
+        "Source",
+        "Chase",
+        "Package"
+      ],
+      "id": "equity-injection-tracker",
+      "repoPublic": false,
+      "problem": "At SBA loan closing, every dollar of the borrower's equity injection has to be traced to invoices and bank statements, usually by hand.",
+      "steps": [
+        {
+          "title": "Ledger",
+          "text": "Track funds used, vendors, amounts and source accounts."
+        },
+        {
+          "title": "Source",
+          "text": "Attach invoices and bank statements to each line and mark it sourced or unsourced, with running totals."
+        },
+        {
+          "title": "Chase",
+          "text": "Request missing documents with a drafted borrower email."
+        },
+        {
+          "title": "Package",
+          "text": "Export the whole closing package as one PDF, with an optional draft watermark."
+        }
+      ],
+      "featured": true
+    },
+    {
+      "name": "Ecolog-IA ESG Risk",
+      "tagline": "ESG scoring from IoT smart-grid data",
+      "description": "ESG risk dashboard built on IoT smart-grid data, with a Random Forest model, feature importance analysis, and a per-project assessment tool with recommendations.",
+      "skills": [
+        "Python",
+        "scikit-learn",
+        "Streamlit"
+      ],
+      "repo": "https://github.com/thomasjmann23/ESG_Risk_Rating",
+      "demo": "https://ecolog-ia.streamlit.app/",
+      "flow": [
+        "Ingest",
+        "Model",
+        "Monitor",
+        "Assess"
+      ],
+      "id": "ecolog-ia-esg-risk",
+      "repoPublic": false,
+      "problem": "ESG ratings are often opaque; this explores scoring projects from measured IoT smart-grid data instead.",
+      "steps": [
+        {
+          "title": "Ingest",
+          "text": "Process IoT smart-grid sensor data into project-level features."
+        },
+        {
+          "title": "Model",
+          "text": "Train a Random Forest regressor and report feature importance and performance."
+        },
+        {
+          "title": "Monitor",
+          "text": "Dashboard for risk classification across projects."
+        },
+        {
+          "title": "Assess",
+          "text": "Score an individual project and suggest recommendations."
+        }
+      ]
+    },
+    {
+      "name": "Packaging Quality Prediction",
+      "tagline": "Team capstone with Capgemini",
+      "description": "IE University capstone (team of five) for Capgemini × a fashion retailer. Trained Logistic Regression, Random Forest and XGBoost on 500,000+ packaging records; the XGBoost model reached AUC-ROC 0.701 with a tuned threshold, plus a cost-benefit calculator.",
+      "skills": [
+        "Python",
+        "scikit-learn"
+      ],
+      "repo": "https://github.com/thomasjmann23/capgemini",
+      "flow": [
+        "Clean",
+        "Engineer",
+        "Model",
+        "Tune"
+      ],
+      "id": "packaging-quality-prediction",
+      "repoPublic": false,
+      "problem": "A fashion retailer's packaging failures were caught after shipment; the goal was to predict them before.",
+      "steps": [
+        {
+          "title": "Clean",
+          "text": "Merge and standardise four data sources, 500,000+ records."
+        },
+        {
+          "title": "Engineer",
+          "text": "Build 28 features, including domain interactions like supplier × season."
+        },
+        {
+          "title": "Model",
+          "text": "Compare Logistic Regression, Random Forest and XGBoost on imbalanced classes."
+        },
+        {
+          "title": "Tune",
+          "text": "Optimise the decision threshold for business cost, with a cost-benefit calculator."
+        }
+      ]
+    },
+    {
+      "name": "Fashion-MNIST CNN",
+      "tagline": "Modular image classifier",
+      "description": "Modular TensorFlow/Keras project with three CNN architectures, training reports and a prediction interface for outside images. The deep model's saved report shows 92.28% test accuracy.",
+      "skills": [
+        "Python",
+        "TensorFlow"
+      ],
+      "repo": "https://github.com/thomasjmann23/DeepLearningCNN",
+      "flow": [
+        "Data",
+        "Build",
+        "Train",
+        "Predict"
+      ],
+      "id": "fashion-mnist-cnn",
+      "repoPublic": false,
+      "problem": "A clean, modular deep learning codebase: train, compare and use CNNs end to end.",
+      "steps": [
+        {
+          "title": "Data",
+          "text": "Load and normalise Fashion-MNIST."
+        },
+        {
+          "title": "Build",
+          "text": "Three architectures: simple, deep and lightweight CNNs."
+        },
+        {
+          "title": "Train",
+          "text": "Training with callbacks, saved models and written reports."
+        },
+        {
+          "title": "Predict",
+          "text": "Preprocess outside images and classify them with a saved model."
+        }
+      ]
+    }
+  ],
+  "privateWork": [
+    {
+      "name": "Automated credit memos",
+      "description": "LLM pipelines for automated credit memos, built by an intern team I led.",
+      "skills": [
+        "Python",
+        "LLM integration",
+        "VBA"
+      ]
+    },
+    {
+      "name": "SEC competitor intelligence",
+      "description": "Competitor intelligence tool on SEC filings using RAG with FAISS and Gemini.",
+      "skills": [
+        "Python",
+        "RAG",
+        "FAISS",
+        "LLM integration"
+      ]
+    },
+    {
+      "name": "Lending inbox triage",
+      "description": "LLM email triage for the Chief Lending Officer's inbox: 1,000+ messages a day.",
+      "skills": [
+        "Python",
+        "LLM integration"
+      ]
+    },
+    {
+      "name": "OCR for SBA loans",
+      "description": "OCR integration for tax document extraction in SBA loan workflows.",
+      "skills": [
+        "Python",
+        "OCR"
+      ]
+    }
+  ],
+  "extras": [
+    "St Andrews Chess Society, Team Lead: UK University League champions, Board 1 (2021)"
+  ],
+  "title": "AVP, Credit Data Scientist",
+  "taglines": [
+    "LLM pipelines for credit memos",
+    "RAG over SEC filings",
+    "AI governance in banking",
+    "From underwriter to AI builder"
+  ],
+  "stats": [
+    {
+      "value": "1,000+",
+      "label": "emails a day triaged by an LLM system I built",
+      "count": true
+    },
+    {
+      "value": "4",
+      "label": "roles at the bank since 2023, from credit specialist to AVP",
+      "count": true
+    },
+    {
+      "value": "2023",
+      "label": "Rookie of the Year at First Bank of the Lake",
+      "count": false
+    },
+    {
+      "value": "Board 1",
+      "label": "UK University League chess champions, 2021",
+      "count": false
+    }
+  ],
+  "employer": "First Bank of the Lake"
+}
