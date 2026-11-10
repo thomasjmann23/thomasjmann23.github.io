@@ -90,6 +90,7 @@
       fillCommon(d);
       ({ index: renderHome, work: renderWork, projects: renderProjects, project: renderProject, research: renderResearch }[page] || (() => {}))(d);
       setupPalette(d);
+      if (page === 'index') personSchema(d);
     })
     .catch(err => console.warn('Render failed:', err))
     .finally(() => {
@@ -106,6 +107,21 @@
     $$('[data-href="linkedin"]').forEach(a => { a.href = d.contact.linkedin; });
     $$('.year').forEach(e => { e.textContent = new Date().getFullYear(); });
     $$('.copy-email').forEach(b => b.addEventListener('click', () => copyEmail(d.contact.email)));
+  }
+
+  // Structured data for search engines, built from resume.json so facts live in one place
+  function personSchema(d) {
+    const job = d.experience[0];
+    const ld = {
+      '@context': 'https://schema.org', '@type': 'Person',
+      name: d.name, alternateName: d.shortName, url: 'https://thomasjmann23.github.io/',
+      jobTitle: job.role, worksFor: { '@type': 'Organization', name: job.org },
+      homeLocation: { '@type': 'Place', name: d.location },
+      alumniOf: d.education.map(e => ({ '@type': 'CollegeOrUniversity', name: e.school })),
+      knowsAbout: [...d.focus, ...d.skills['Generative AI'], 'Credit underwriting'],
+      email: 'mailto:' + d.contact.email, sameAs: [d.contact.linkedin]
+    };
+    document.head.append(h('script', { type: 'application/ld+json', text: JSON.stringify(ld) }));
   }
 
   async function copyEmail(email) {

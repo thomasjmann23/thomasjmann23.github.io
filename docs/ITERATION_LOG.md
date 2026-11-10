@@ -2,6 +2,14 @@
 
 Newest first. One entry per run.
 
+## 2026-11-10 — Social preview + structured data
+- **Category:** SEO/meta/social preview
+- **What:** Link previews now show a card in the site's own style (stone paper, ledger rules, Archivo at full width, one cobalt rule, Plex Mono labels): `assets/og.png`, 1200×630, rendered from resume.json by `tools/make_og.py` (re-run if name, headline or role change). All pages get og:image (+ size, alt), og:url, og:site_name and `twitter:card` summary_large_image. Home adds a schema.org `Person` JSON-LD block built in site.js from resume.json (name, role, employer, location, schools, focus, LinkedIn); no facts hard-coded.
+- **PR:** see the PR for this branch (daily/2026-11-10-social-preview).
+- **Checks:** tools/check.py all pages at 1440/390: pass. Lighthouse home (mobile): Performance 98, Accessibility 100, Best Practices 100, SEO 100.
+- **Preview:** not republished (optional now that the site is live).
+- **Suggested next:** design polish, backlog #9: draw the → arrows as inline SVG (they fall outside the Archivo subset), or content & story #1: the underwriter → builder scroll story on work.html.
+
 ## 2026-11-10 — Recover unpushed drafts
 - **What:** Daily runs since Oct 28 couldn't push to the repo, so their work only reached the private preview. Restored it from the preview into the repo: card ⇄ detail view-transition morph (backlog #1), "The lab" tabs on the home demo with a new Inbox triage demo, and command-menu accessibility (empty state, live status, help text).
 - **Checks:** tools/check.py all pages at 1440/390: pass.
