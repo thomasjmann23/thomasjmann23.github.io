@@ -2,6 +2,11 @@
 
 Newest first. One entry per run.
 
+## 2026-11-10 — Research: OCR spreading tools vs LLMs
+- **What:** Published the first research paper, `research.html?id=ocr-spreading-vs-llm-extraction` (about 5,000 words, 5 hand-drawn SVG figures, 46 sources). Compares dedicated auto-spreading tools (Moody's, nCino, Abrigo, FlashSpread, Baker Hill) with general LLM extraction on accuracy, failure modes, auditability, cost and validation. Queue item checked off.
+- **Checks:** tools/check.py all pages: pass. Article opened at 1440 and 390: figures, table and sources render, no horizontal overflow (long source URLs carry `<wbr>` break hints).
+- **Notes:** "FlashSpreads" was not found under that name; treated as FlashSpread (BeSmartee). Vendor accuracy figures are self-reported and labelled as such.
+
 ## 2026-11-10 — Inbox triage first in the lab
 - **What:** Thomas asked to prioritize Inbox triage over 8-K alerts until 8-K uses real data. Inbox is now the first, default tab; 8-K is second. Rule added to DAILY_INSTRUCTIONS.md.
 - **Checks:** tools/check.py all pages: pass. Verified Inbox is selected and running on load, 8-K panel hidden.
