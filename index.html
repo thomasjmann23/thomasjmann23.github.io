@@ -56,19 +56,35 @@
       <aside class="demo panel enter" style="--d:3" aria-labelledby="demo-title">
         <div class="demo-head">
           <div>
-            <h2 id="demo-title">8-K alert triage</h2>
-            <p class="demo-note"><span class="live" aria-hidden="true"></span>Live demo · synthetic companies, fake data</p>
+            <h2 id="demo-title">The lab</h2>
+            <p class="demo-note"><span class="live" aria-hidden="true"></span>Live demos · synthetic data, fictional companies</p>
           </div>
           <button class="pill demo-pause" type="button" aria-pressed="false">Pause</button>
         </div>
-        <div class="seg demo-filters" role="group" aria-label="Filter alerts by priority">
-          <button type="button" data-p="all" aria-pressed="true">All</button>
-          <button type="button" data-p="high" aria-pressed="false">High</button>
-          <button type="button" data-p="watch" aria-pressed="false">Watch</button>
-          <button type="button" data-p="info" aria-pressed="false">Info</button>
+        <div class="lab-tabs" role="tablist" aria-label="Demos">
+          <button type="button" role="tab" id="tab-8k" aria-controls="lab-8k" aria-selected="true">8-K alerts</button>
+          <button type="button" role="tab" id="tab-inbox" aria-controls="lab-inbox" aria-selected="false" tabindex="-1">Inbox triage</button>
         </div>
-        <ol class="feed" aria-label="Simulated 8-K alerts"></ol>
-        <p class="demo-foot">Each filing is tagged by its 8-K item and given a priority with a one-line reason, the way a credit team would want it. Select an alert to see why.</p>
+        <div class="lab-panel" id="lab-8k" role="tabpanel" aria-labelledby="tab-8k">
+          <div class="seg demo-filters" role="group" aria-label="Filter alerts by priority">
+            <button type="button" data-p="all" aria-pressed="true">All</button>
+            <button type="button" data-p="high" aria-pressed="false">High</button>
+            <button type="button" data-p="watch" aria-pressed="false">Watch</button>
+            <button type="button" data-p="info" aria-pressed="false">Info</button>
+          </div>
+          <ol class="feed" aria-label="Simulated 8-K alerts"></ol>
+          <p class="demo-foot">Each filing is tagged by its 8-K item and given a priority with a one-line reason, the way a credit team would want it. Select an alert to see why.</p>
+        </div>
+        <div class="lab-panel" id="lab-inbox" role="tabpanel" aria-labelledby="tab-inbox" hidden>
+          <div class="reading" aria-hidden="true"></div>
+          <div class="lanes">
+            <section class="lane act" aria-labelledby="lane-act"><h3 id="lane-act">Act today <span class="n">0</span></h3><ol></ol></section>
+            <section class="lane hand" aria-labelledby="lane-hand"><h3 id="lane-hand">Hand off <span class="n">0</span></h3><ol></ol></section>
+            <section class="lane fyi" aria-labelledby="lane-fyi"><h3 id="lane-fyi">FYI <span class="n">0</span></h3><ol></ol></section>
+          </div>
+          <p class="inbox-why">Select a message to see why it landed there.</p>
+          <p class="demo-foot">A toy version of the LLM triage I built for a busy lending inbox: every message gets a lane and a one-line reason. Lanes and messages here are illustrative.</p>
+        </div>
       </aside>
     </section>
 
@@ -105,9 +121,12 @@
     <span>Hand-built HTML, CSS &amp; JS · press <kbd>⌘K</kbd></span>
   </footer>
   <dialog class="palette" aria-label="Command menu">
-    <input type="text" placeholder="Search pages, projects, actions…" aria-label="Search commands" role="combobox" aria-expanded="true" aria-controls="palette-list" aria-autocomplete="list">
-    <ul id="palette-list" role="listbox"></ul>
-    <div class="hint"><span>↑↓ move</span><span>↵ open</span><span>esc close</span></div>
+    <input type="text" placeholder="Search pages, projects, actions…" aria-label="Search commands" role="combobox" aria-expanded="true" aria-controls="palette-list" aria-autocomplete="list" aria-describedby="palette-help" autocomplete="off" spellcheck="false">
+    <ul id="palette-list" role="listbox" aria-label="Commands"></ul>
+    <p class="palette-empty" hidden></p>
+    <p class="sr-only" id="palette-help">Type to filter. Up and down arrows move, Enter opens, Escape closes.</p>
+    <p class="sr-only palette-status" role="status"></p>
+    <div class="hint" aria-hidden="true"><span>↑↓ move</span><span>↵ open</span><span>esc close</span></div>
   </dialog>
   <noscript><p class="wrap">This site renders from <a href="content/resume.json">content/resume.json</a>; enable JavaScript to see it.</p></noscript>
   <script src="assets/js/site.js" defer></script>

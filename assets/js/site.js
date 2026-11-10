@@ -26,6 +26,36 @@
   const arrow = (c = '→') => h('span', { class: 'arrow', 'aria-hidden': 'true', text: c });
   const projectUrl = id => `project.html?id=${encodeURIComponent(id)}`;
 
+  /* ---------------- Card ⇄ detail morph ----------------
+     Only the card you clicked (or are returning to) carries view-transition
+     names, so the file "pulls out of the drawer" into the detail header and
+     every other card leaves with the page. Names are cleared afterwards. */
+  const MORPH = ['p-card', 'p-tag', 'p-title'];
+  const urlOf = u => { try { return new URL(u, location.href); } catch (e) { return null; } };
+  const detailId = u => { const x = urlOf(u); return x && /\/project\.html$/.test(x.pathname) ? x.searchParams.get('id') : null; };
+  const isList = u => { const x = urlOf(u); return !!x && /\/(index\.html|projects\.html)?$/.test(x.pathname); };
+  function morphEls(id) {
+    if (page === 'project') {
+      const hero = $('.detail-hero');
+      return hero && id === params.get('id') ? [hero, $('.tag', hero), $('h1', hero)] : null;
+    }
+    const card = id && $$('.card[data-id]').find(c => c.dataset.id === id);
+    return card ? [card, $('.k', card), $('h3', card)] : null;
+  }
+  function morph(vt, otherUrl) {
+    if (!vt || !otherUrl) return;
+    const id = page === 'project' ? (isList(otherUrl) ? params.get('id') : null) : detailId(otherUrl);
+    const els = morphEls(id);
+    if (!els) return;
+    els.forEach((el, i) => { if (el) el.style.viewTransitionName = MORPH[i]; });
+    vt.finished.finally(() => els.forEach(el => { if (el) el.style.viewTransitionName = ''; }));
+  }
+  addEventListener('pageswap', e => morph(e.viewTransition, e.activation && e.activation.entry && e.activation.entry.url));
+  addEventListener('pagereveal', e => {
+    const act = window.navigation && navigation.activation;
+    morph(e.viewTransition, act && act.from && act.from.url);
+  });
+
   /* ---------------- Theme ---------------- */
   // Follows the system theme; an explicit choice is remembered in localStorage.
   const sysDark = matchMedia('(prefers-color-scheme: dark)');
@@ -88,12 +118,13 @@
   function projectCard(p, i) {
     const card = h('a', { class: 'card reveal', href: projectUrl(p.id) },
       h('span', { class: 'k', text: p.tagline }),
-      h('h3', { text: p.name, style: `view-transition-name: p-${p.id}` }),
+      h('h3', { text: p.name }),
       h('ol', { class: 'flow', 'aria-label': 'How it works' }, p.flow.map((s, j) => h('li', { text: s, style: `--i:${j}` }))),
       h('p', { text: p.description }),
       h('ul', { class: 'chips', 'aria-label': 'Skills' }, p.skills.map(s => h('li', { class: 'chip', text: s }))),
       h('span', { class: 'go' }, h('span', { text: 'How it works' }), arrow()));
     card.dataset.skills = p.skills.join('|');
+    card.dataset.id = p.id;
     return card;
   }
 
@@ -103,7 +134,7 @@
       h('div', { class: 'stat' }, h('div', { class: 'n', 'data-count': s.count ? s.value : null, text: s.value }), h('div', { class: 'l', text: s.label }))));
     countUp();
     $('[data-render="featured"]').replaceChildren(...d.projects.filter(p => p.featured).map(projectCard));
-    demo();
+    lab();
   }
 
   // Animate numbers like "1,000+" once visible
@@ -192,7 +223,7 @@
     host.replaceChildren(
       h('header', { class: 'detail-hero' },
         h('a', { class: 'back enter', href: 'projects.html' }, arrow('←'), 'All projects'),
-        h('h1', { text: p.name, style: `view-transition-name: p-${p.id}` }),
+        h('h1', { text: p.name }),
         h('p', { class: 'tag alt enter', style: '--d:1', text: p.tagline })),
       h('div', { class: 'detail-grid' },
         h('section', { class: 'enter', style: '--d:2', 'aria-labelledby': 'how' },
@@ -252,7 +283,8 @@
   /* ---------------- Command palette (⌘K) ---------------- */
   function setupPalette(d) {
     const dlg = $('.palette'); if (!dlg) return;
-    const input = $('input', dlg), list = $('ul', dlg);
+    const input = $('input', dlg), list = $('ul', dlg), empty = $('.palette-empty', dlg), status = $('.palette-status', dlg);
+    let announce = 0, opener = null;
     const go = url => () => { location.href = url; };
     const cmds = [
       { t: 'Home', s: 'page', run: go('index.html') },
@@ -274,11 +306,18 @@
         li.addEventListener('pointermove', () => { if (sel !== i) { sel = i; mark(); } });
         return li;
       }));
+      const none = !shown.length;
+      list.hidden = none; empty.hidden = !none;
+      input.setAttribute('aria-expanded', String(!none));
+      if (none) empty.textContent = `No matches for “${input.value.trim()}”. Try a skill, like RAG or Python.`;
+      // Announce the result count once typing pauses, not on every keystroke.
+      clearTimeout(announce);
+      announce = setTimeout(() => { status.textContent = none ? 'No matches' : `${shown.length} result${shown.length === 1 ? '' : 's'}`; }, 450);
       mark();
     };
     const mark = () => {
       $$('li', list).forEach((li, i) => li.setAttribute('aria-selected', String(i === sel)));
-      input.setAttribute('aria-activedescendant', shown.length ? 'cmd-' + sel : '');
+      if (shown.length) input.setAttribute('aria-activedescendant', 'cmd-' + sel); else input.removeAttribute('aria-activedescendant');
       list.children[sel]?.scrollIntoView({ block: 'nearest' });
     };
     const filter = () => {
@@ -286,11 +325,16 @@
       shown = !q ? cmds : cmds.filter(c => (c.t + ' ' + c.s + ' ' + (c.k || '')).toLowerCase().includes(q));
       sel = 0; draw();
     };
-    const open = () => { if (dlg.open) return; input.value = ''; filter(); dlg.showModal(); input.focus(); };
+    const open = () => { if (dlg.open) return; opener = document.activeElement; input.value = ''; status.textContent = ''; filter(); dlg.showModal(); input.focus(); };
+    // Hand focus back to whatever opened the menu (unless a command navigated away).
+    dlg.addEventListener('close', () => { clearTimeout(announce); if (opener && opener.isConnected && document.activeElement !== opener) opener.focus({ preventScroll: true }); opener = null; });
     input.addEventListener('input', filter);
     input.addEventListener('keydown', e => {
-      if (e.key === 'ArrowDown') { sel = Math.min(shown.length - 1, sel + 1); mark(); e.preventDefault(); }
-      else if (e.key === 'ArrowUp') { sel = Math.max(0, sel - 1); mark(); e.preventDefault(); }
+      const n = shown.length;
+      const to = { ArrowDown: (sel + 1) % n, ArrowUp: (sel - 1 + n) % n, Home: 0, End: n - 1 }[e.key];
+      // Home/End move the caret while there is text to edit; they pick the first/last command otherwise.
+      const caretKey = (e.key === 'Home' || e.key === 'End') && input.value && !e.ctrlKey;
+      if (to != null && n && !caretKey) { sel = to; mark(); e.preventDefault(); }
       else if (e.key === 'Enter' && shown[sel]) { e.preventDefault(); dlg.close(); shown[sel].run(); }
     });
     dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
@@ -301,10 +345,56 @@
     });
   }
 
-  /* ---------------- 8-K triage demo (synthetic data) ---------------- */
-  function demo() {
-    const feed = $('.feed'); if (!feed) return;
-    const box = $('.demo'), pauseBtn = $('.demo-pause');
+  /* ---------------- The lab: two demos behind tabs (synthetic data) ----------------
+     One Pause button and one visibility check drive whichever tab is open;
+     the hidden demo never runs. Each demo also holds still while the pointer
+     or focus is inside it, so nothing moves under the reader. */
+  function lab() {
+    const box = $('.demo'); if (!box) return;
+    const pauseBtn = $('.demo-pause');
+    const tabs = $$('[role="tab"]', box);
+    const demos = { 'lab-8k': eightK(), 'lab-inbox': inbox() };
+    let paused = false, visible = true, active = 'lab-8k';
+    const sync = () => Object.entries(demos).forEach(([id, d]) => d.allow(!paused && visible && !document.hidden && id === active));
+    const setPaused = v => { paused = v; box.classList.toggle('paused', v); pauseBtn.textContent = v ? 'Play' : 'Pause'; pauseBtn.setAttribute('aria-pressed', String(v)); sync(); };
+    const select = (tab, focus) => {
+      tabs.forEach(t => {
+        const on = t === tab;
+        t.setAttribute('aria-selected', String(on)); t.tabIndex = on ? 0 : -1;
+        $('#' + t.getAttribute('aria-controls')).hidden = !on;
+      });
+      active = tab.getAttribute('aria-controls');
+      if (focus) tab.focus();
+      sync();
+    };
+    tabs.forEach((t, i) => {
+      t.addEventListener('click', () => select(t));
+      t.addEventListener('keydown', e => {
+        const n = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 }[e.key];
+        if (n == null) return;
+        e.preventDefault(); select(tabs[(n + tabs.length) % tabs.length], true);
+      });
+    });
+    pauseBtn.addEventListener('click', () => setPaused(!paused));
+    if ('IntersectionObserver' in window) new IntersectionObserver(([en]) => { visible = en.isIntersecting; sync(); }).observe(box);
+    document.addEventListener('visibilitychange', sync);
+    setPaused(reduceMotion);
+  }
+
+  // Shared timer logic: runs only when the lab allows it and nobody is reading.
+  function ticker(el, fn, ms) {
+    let allowed = false, hovering = false, timer = 0;
+    const run = () => { clearInterval(timer); timer = allowed && !hovering ? setInterval(fn, ms) : 0; };
+    ['mouseenter', 'focusin'].forEach(ev => el.addEventListener(ev, () => { hovering = true; run(); }));
+    ['mouseleave', 'focusout'].forEach(ev => el.addEventListener(ev, () => { hovering = false; run(); }));
+    return { allow: v => { allowed = v; run(); } };
+  }
+  const clockText = m => `${String(Math.floor(m / 60) % 24).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
+  const pickNot = (n, last) => { let i; do { i = Math.floor(Math.random() * n); } while (i === last && n > 1); return i; };
+
+  /* 8-K alert triage */
+  function eightK() {
+    const feed = $('.feed');
     const COS = [['HRBR', 'Harborview Bancorp'], ['KSTL', 'Kestrel Logistics'], ['PNLK', 'Pinelake Foods'], ['ORVM', 'Orvium Materials'], ['BLFN', 'Bluefin Health'], ['CDRX', 'Cedar Ridge Energy'], ['MRDN', 'Meridian Hospitality'], ['TLLS', 'Tallis Software'], ['QNTR', 'Quarry & Stone Co.']];
     const ITEMS = [
       { code: '4.02', p: 'high', hd: 'Prior financial statements should no longer be relied upon', why: 'Restatement risk: revisit covenant calculations built on those numbers.' },
@@ -317,37 +407,85 @@
       { code: '7.01', p: 'info', hd: 'Investor presentation furnished (Reg FD)', why: 'Routine disclosure: index for search, no action needed.' },
       { code: '8.01', p: 'info', hd: 'Board declares regular quarterly dividend', why: 'Routine: no change in credit picture.' }
     ];
-    let filter = 'all', paused = false, timer = 0, clock = 9 * 60 + 2, last = -1, lastCo = -1, visible = true;
+    let filter = 'all', clock = 9 * 60 + 2, last = -1, lastCo = -1;
     const make = () => {
-      let i; do { i = Math.floor(Math.random() * ITEMS.length); } while (i === last); last = i;
-      const it = ITEMS[i];
-      let c; do { c = Math.floor(Math.random() * COS.length); } while (c === lastCo); lastCo = c; const co = COS[c];
+      const it = ITEMS[last = pickNot(ITEMS.length, last)];
+      const co = COS[lastCo = pickNot(COS.length, lastCo)];
       clock += 1 + Math.floor(Math.random() * 6);
-      const t = `${String(Math.floor(clock / 60) % 24).padStart(2, '0')}:${String(clock % 60).padStart(2, '0')}`;
       const btn = h('button', { type: 'button', 'aria-expanded': 'false' },
         h('span', { class: 'tk', text: co[0] }), h('span', { class: 'hd', text: it.hd }), h('span', { class: 'pri ' + it.p, text: it.p }),
-        h('span', { class: 'meta', text: `${t} ET · Item ${it.code} · ${co[1]}` }), h('span', { class: 'why', text: 'Why: ' + it.why }));
+        h('span', { class: 'meta', text: `${clockText(clock)} ET · Item ${it.code} · ${co[1]}` }), h('span', { class: 'why', text: 'Why: ' + it.why }));
       const li = h('li', { class: 'alert' }, btn);
       li.dataset.p = it.p; li.hidden = filter !== 'all' && filter !== it.p;
       btn.addEventListener('click', () => btn.setAttribute('aria-expanded', String(li.classList.toggle('open'))));
       return li;
     };
     const push = () => { feed.prepend(make()); while (feed.children.length > 14) feed.lastElementChild.remove(); };
-    const run = () => { clearInterval(timer); timer = (!paused && visible && !document.hidden && !hovering) ? setInterval(push, 2600) : 0; };
-    let hovering = false;
-    const setPaused = v => { paused = v; box.classList.toggle('paused', v); pauseBtn.textContent = v ? 'Play' : 'Pause'; pauseBtn.setAttribute('aria-pressed', String(v)); run(); };
     for (let k = 0; k < 6; k++) push();
-    pauseBtn.addEventListener('click', () => setPaused(!paused));
-    ['mouseenter', 'focusin'].forEach(ev => feed.addEventListener(ev, () => { hovering = true; run(); }));
-    ['mouseleave', 'focusout'].forEach(ev => feed.addEventListener(ev, () => { hovering = false; run(); }));
     $('.demo-filters').addEventListener('click', e => {
       const b = e.target.closest('button'); if (!b) return;
       filter = b.dataset.p;
       $$('.demo-filters button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
       $$('.alert', feed).forEach(li => { li.hidden = filter !== 'all' && li.dataset.p !== filter; });
     });
-    if ('IntersectionObserver' in window) new IntersectionObserver(([en]) => { visible = en.isIntersecting; run(); }).observe(box);
-    document.addEventListener('visibilitychange', run);
-    setPaused(reduceMotion);
+    return ticker(feed, push, 2600);
+  }
+
+  /* Inbox triage: a message is read in the slot at the top, gets a lane and a
+     reason, then drops into its lane (FLIP, so nothing else on the page moves). */
+  function inbox() {
+    const panel = $('#lab-inbox'), slot = $('.reading', panel), why = $('.inbox-why', panel);
+    const LANES = { act: 'Act today', hand: 'Hand off', fyi: 'FYI' };
+    const MAIL = [
+      { l: 'act', from: 'Borrower · Pinelake Foods', s: 'Closing moved up: can we sign Thursday?', why: 'A borrower needs a date decision: reply today.' },
+      { l: 'act', from: 'Loan officer', s: 'Policy exception request on a pending deal', why: 'The deal is stalled until someone with authority approves it.' },
+      { l: 'act', from: 'Title company', s: 'Lien search shows an unexpected UCC filing', why: 'Possible blocker to closing: review before anything else.' },
+      { l: 'act', from: 'Borrower · Kestrel Logistics', s: 'Question about a late payment notice', why: 'Payment problem on an active loan: respond the same day.' },
+      { l: 'hand', from: 'Credit admin', s: 'Updated tax returns received for annual review', why: 'Routine document: route to the analyst on the file.' },
+      { l: 'hand', from: 'Appraiser', s: 'Draft appraisal ready for review', why: 'Needs a reviewer, not the inbox owner.' },
+      { l: 'hand', from: 'Borrower · Cedar Ridge Energy', s: 'Renewed insurance certificate attached', why: 'Collateral paperwork: send to loan servicing.' },
+      { l: 'hand', from: 'Operations', s: 'Request to change a payment draft date', why: 'Servicing change: belongs with operations.' },
+      { l: 'fyi', from: 'Industry newsletter', s: 'Weekly rate outlook', why: 'Newsletter: read in the daily digest.' },
+      { l: 'fyi', from: 'Compliance', s: 'Reminder: annual training due end of month', why: 'Deadline is weeks away: no action today.' },
+      { l: 'fyi', from: 'Calendar', s: 'Pipeline meeting moved to 2:30', why: 'Calendar update: no reply needed.' },
+      { l: 'fyi', from: 'Marketing', s: 'New branch opening announcement', why: 'Announcement: nothing to do.' }
+    ];
+    const lane = k => $('.lane.' + k, panel);
+    let last = -1, clock = 8 * 60 + 14, pending = 0;
+    const counts = { act: 0, hand: 0, fyi: 0 };
+    const showWhy = (m, btn) => {
+      $$('.lane button', panel).forEach(b => b.setAttribute('aria-pressed', String(b === btn)));
+      why.replaceChildren(h('b', { text: LANES[m.l] + ': ' }), m.why);
+    };
+    const file = (m, from) => {
+      const btn = h('button', { type: 'button', 'aria-pressed': 'false' }, h('span', { class: 'f', text: m.from }), h('span', { class: 's', text: m.s }));
+      btn.addEventListener('click', () => showWhy(m, btn));
+      const li = h('li', {}, btn), ol = $('ol', lane(m.l));
+      li.dataset.s = m.s;
+      $$('li', ol).forEach(x => { if (x.dataset.s === m.s) x.remove(); });
+      ol.prepend(li);
+      while (ol.children.length > 4) ol.lastElementChild.remove();
+      $('.n', lane(m.l)).textContent = ++counts[m.l];
+      if (from && !reduceMotion && li.animate) {
+        const to = li.getBoundingClientRect();
+        li.animate([{ transform: `translate(${from.left - to.left}px, ${from.top - to.top}px)`, opacity: .4 }, { transform: 'none', opacity: 1 }],
+          { duration: 520, easing: 'cubic-bezier(.16, 1, .3, 1)' });
+      }
+    };
+    const next = () => {
+      const m = MAIL[last = pickNot(MAIL.length, last)];
+      clock += 1 + Math.floor(Math.random() * 4);
+      const card = h('div', { class: 'msg' },
+        h('span', { class: 'meta', text: `${clockText(clock)} · ${m.from}` }),
+        h('span', { class: 's', text: m.s }),
+        h('span', { class: 'verdict' }, h('span', { class: 'to ' + m.l, text: '→ ' + LANES[m.l] }), h('span', { text: m.why })));
+      slot.replaceChildren(card);
+      clearTimeout(pending);
+      pending = setTimeout(() => { card.classList.add('done'); file(m, card.getBoundingClientRect()); }, reduceMotion ? 0 : 1500);
+    };
+    // Seed so the panel reads fully at rest.
+    [0, 4, 8, 1, 9, 5, 10].forEach(i => file(MAIL[i]));
+    last = 10; next();
+    return ticker(panel, next, 3400);
   }
 })();
