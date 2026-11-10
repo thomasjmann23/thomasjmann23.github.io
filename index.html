@@ -69,20 +69,10 @@
           <button class="pill demo-pause" type="button" aria-pressed="false">Pause</button>
         </div>
         <div class="lab-tabs" role="tablist" aria-label="Demos">
-          <button type="button" role="tab" id="tab-8k" aria-controls="lab-8k" aria-selected="true">8-K alerts</button>
-          <button type="button" role="tab" id="tab-inbox" aria-controls="lab-inbox" aria-selected="false" tabindex="-1">Inbox triage</button>
+          <button type="button" role="tab" id="tab-inbox" aria-controls="lab-inbox" aria-selected="true">Inbox triage</button>
+          <button type="button" role="tab" id="tab-8k" aria-controls="lab-8k" aria-selected="false" tabindex="-1">8-K alerts</button>
         </div>
-        <div class="lab-panel" id="lab-8k" role="tabpanel" aria-labelledby="tab-8k">
-          <div class="seg demo-filters" role="group" aria-label="Filter alerts by priority">
-            <button type="button" data-p="all" aria-pressed="true">All</button>
-            <button type="button" data-p="high" aria-pressed="false">High</button>
-            <button type="button" data-p="watch" aria-pressed="false">Watch</button>
-            <button type="button" data-p="info" aria-pressed="false">Info</button>
-          </div>
-          <ol class="feed" aria-label="Simulated 8-K alerts"></ol>
-          <p class="demo-foot">Each filing is tagged by its 8-K item and given a priority with a one-line reason, the way a credit team would want it. Select an alert to see why.</p>
-        </div>
-        <div class="lab-panel" id="lab-inbox" role="tabpanel" aria-labelledby="tab-inbox" hidden>
+        <div class="lab-panel" id="lab-inbox" role="tabpanel" aria-labelledby="tab-inbox">
           <div class="reading" aria-hidden="true"></div>
           <div class="lanes">
             <section class="lane act" aria-labelledby="lane-act"><h3 id="lane-act">Act today <span class="n">0</span></h3><ol></ol></section>
@@ -91,6 +81,16 @@
           </div>
           <p class="inbox-why">Select a message to see why it landed there.</p>
           <p class="demo-foot">A toy version of the LLM triage I built for a busy lending inbox: every message gets a lane and a one-line reason. Lanes and messages here are illustrative.</p>
+        </div>
+        <div class="lab-panel" id="lab-8k" role="tabpanel" aria-labelledby="tab-8k" hidden>
+          <div class="seg demo-filters" role="group" aria-label="Filter alerts by priority">
+            <button type="button" data-p="all" aria-pressed="true">All</button>
+            <button type="button" data-p="high" aria-pressed="false">High</button>
+            <button type="button" data-p="watch" aria-pressed="false">Watch</button>
+            <button type="button" data-p="info" aria-pressed="false">Info</button>
+          </div>
+          <ol class="feed" aria-label="Simulated 8-K alerts"></ol>
+          <p class="demo-foot">Each filing is tagged by its 8-K item and given a priority with a one-line reason, the way a credit team would want it. Select an alert to see why.</p>
         </div>
       </aside>
     </section>

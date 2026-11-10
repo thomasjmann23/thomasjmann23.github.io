@@ -7,7 +7,8 @@ A hiring manager at a London bank or AI team should remember this site. Target r
 
 ## Current status (update this section when it changes)
 - **Live:** the site repo `thomasjmann23/thomasjmann23.github.io` is **public** and served by GitHub Pages from `main` at https://thomasjmann23.github.io (went live 2026-10-28). Every merge to `main` deploys, so step 6 (live check, revert if broken) always applies.
-- **All of Thomas's other repos are private** (brand rebuild lockdown). Never link them, never make them public.
+- **All of Thomas's other repos are private** (brand rebuild lockdown), except `Equity-Injection-Concept`, which Thomas made public again on 2026-11-10. Never link them, never make them public.
+- **The lab (home demo):** Inbox triage is the first, default tab; 8-K alerts comes second. Keep it that way until the 8-K feed runs on real data, then ask Thomas before switching back.
 - **This repo is public:** anything you commit (docs, logs, backlog, PR text, commit messages) is visible to anyone, history included. Never write private information into it: no details from his email or Drive beyond what the site itself shows, no names of other employers or firms he has talked to, no salary or job-search details, nothing about colleagues or the bank's internals. Sensitive questions for Thomas go only in your end-of-run summary message, not in BACKLOG.md.
 - **Private preview:** https://claude.ai/artifact/NRC5hueE4maVQSaUn6o2Pa still exists; republishing it is optional now (step 7).
 - You cannot change repo settings from the cloud workspace (the proxy blocks it). If a setting must change, ask Thomas.
