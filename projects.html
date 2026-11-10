@@ -60,9 +60,12 @@
     <span>Hand-built HTML, CSS &amp; JS · press <kbd>⌘K</kbd></span>
   </footer>
   <dialog class="palette" aria-label="Command menu">
-    <input type="text" placeholder="Search pages, projects, actions…" aria-label="Search commands" role="combobox" aria-expanded="true" aria-controls="palette-list" aria-autocomplete="list">
-    <ul id="palette-list" role="listbox"></ul>
-    <div class="hint"><span>↑↓ move</span><span>↵ open</span><span>esc close</span></div>
+    <input type="text" placeholder="Search pages, projects, actions…" aria-label="Search commands" role="combobox" aria-expanded="true" aria-controls="palette-list" aria-autocomplete="list" aria-describedby="palette-help" autocomplete="off" spellcheck="false">
+    <ul id="palette-list" role="listbox" aria-label="Commands"></ul>
+    <p class="palette-empty" hidden></p>
+    <p class="sr-only" id="palette-help">Type to filter. Up and down arrows move, Enter opens, Escape closes.</p>
+    <p class="sr-only palette-status" role="status"></p>
+    <div class="hint" aria-hidden="true"><span>↑↓ move</span><span>↵ open</span><span>esc close</span></div>
   </dialog>
   <noscript><p class="wrap">This site renders from <a href="content/resume.json">content/resume.json</a>; enable JavaScript to see it.</p></noscript>
   <script src="assets/js/site.js" defer></script>

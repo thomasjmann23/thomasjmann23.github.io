@@ -2,6 +2,10 @@
 
 Newest first. One entry per run.
 
+## 2026-11-10 — Recover unpushed drafts
+- **What:** Daily runs since Oct 28 couldn't push to the repo, so their work only reached the private preview. Restored it from the preview into the repo: card ⇄ detail view-transition morph (backlog #1), "The lab" tabs on the home demo with a new Inbox triage demo, and command-menu accessibility (empty state, live status, help text).
+- **Checks:** tools/check.py all pages at 1440/390: pass.
+
 ## 2026-10-28 — Go live (setup, part 4)
 - **What:** Thomas chose to make only this site repo public. Removed `noindex`, enabled GitHub Pages from `main`. History squashed to one commit before going public. Other repos stay private.
 
