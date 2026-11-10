@@ -1,3 +1,19 @@
 {
-  "items": []
+  "items": [
+    {
+      "id": "ocr-spreading-vs-llm-extraction",
+      "title": "OCR spreading tools vs LLMs for financial statement extraction",
+      "date": "2026-11-10",
+      "status": "Complete",
+      "summary": "Compares dedicated auto-spreading tools with general LLM extraction on accuracy, failure modes, auditability, cost and validation, using public benchmarks, vendor materials and US guidance. The best LLMs now read financial pages as well as good OCR, but their errors are silent, so the controls around the extractor matter more than the engine.",
+      "tags": [
+        "Credit",
+        "Spreading",
+        "LLMs",
+        "OCR",
+        "Model risk"
+      ],
+      "file": "research/ocr-spreading-vs-llm-extraction/index.md"
+    }
+  ]
 }
