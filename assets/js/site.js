@@ -23,7 +23,9 @@
     for (const k of kids.flat()) if (k != null && k !== false) el.append(k);
     return el;
   }
-  const arrow = (c = '→') => h('span', { class: 'arrow', 'aria-hidden': 'true', text: c });
+  // Arrows are drawn, not typed: → ← ↗ aren't in the Archivo/Plex subsets and fell back to a system face
+  const ARROWS = { '→': 'M2 8h11M9 4l4 4-4 4', '←': 'M14 8H3M7 4 3 8l4 4', '↗': 'M4 12 12 4M6 4h6v6' };
+  const arrow = (c = '→') => { const s = h('span', { class: 'arrow', 'aria-hidden': 'true' }); s.innerHTML = `<svg viewBox="0 0 16 16" focusable="false"><path d="${ARROWS[c]}"/></svg>`; return s; };
   const projectUrl = id => `project.html?id=${encodeURIComponent(id)}`;
 
   /* ---------------- Card ⇄ detail morph ----------------
@@ -250,11 +252,11 @@
           h('section', { class: 'enter', style: '--d:4', 'aria-labelledby': 'what' }, h('h2', { id: 'what', text: 'Summary' }), h('p', { text: p.description })),
           h('section', { class: 'enter', style: '--d:5', 'aria-labelledby': 'stack' }, h('h2', { id: 'stack', text: 'Stack' }),
             h('ul', { class: 'chips' }, p.skills.map(s => h('li', {}, h('a', { class: 'chip', href: `projects.html?skill=${encodeURIComponent(s)}`, text: s })))),
-            p.demo ? h('p', { style: 'margin-top:16px' }, h('a', { href: p.demo, rel: 'noopener' }, 'Open the live app', arrow('↗'))) : null,
-            p.repoPublic && p.repo ? h('p', { style: 'margin-top:8px' }, h('a', { href: p.repo, rel: 'noopener' }, 'Source on GitHub', arrow('↗'))) : null))),
+            p.demo ? h('p', { style: 'margin-top:16px' }, h('a', { href: p.demo, rel: 'noopener' }, 'Open the live app ', arrow('↗'))) : null,
+            p.repoPublic && p.repo ? h('p', { style: 'margin-top:8px' }, h('a', { href: p.repo, rel: 'noopener' }, 'Source on GitHub ', arrow('↗'))) : null))),
       h('nav', { class: 'pager', 'aria-label': 'More projects' },
-        h('a', { href: projectUrl(prev.id) }, h('span', { text: '← Previous' }), prev.name),
-        h('a', { href: projectUrl(next.id) }, h('span', { text: 'Next →' }), next.name)));
+        h('a', { href: projectUrl(prev.id) }, h('span', {}, arrow('←'), ' Previous'), prev.name),
+        h('a', { href: projectUrl(next.id) }, h('span', {}, 'Next ', arrow()), next.name)));
   }
 
   /* ---------------- Research ---------------- */
@@ -494,7 +496,7 @@
       const card = h('div', { class: 'msg' },
         h('span', { class: 'meta', text: `${clockText(clock)} · ${m.from}` }),
         h('span', { class: 's', text: m.s }),
-        h('span', { class: 'verdict' }, h('span', { class: 'to ' + m.l, text: '→ ' + LANES[m.l] }), h('span', { text: m.why })));
+        h('span', { class: 'verdict' }, h('span', { class: 'to ' + m.l }, arrow(), ' ' + LANES[m.l]), h('span', { text: m.why })));
       slot.replaceChildren(card);
       clearTimeout(pending);
       pending = setTimeout(() => { card.classList.add('done'); file(m, card.getBoundingClientRect()); }, reduceMotion ? 0 : 1500);

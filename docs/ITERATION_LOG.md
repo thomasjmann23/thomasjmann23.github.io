@@ -2,6 +2,13 @@
 
 Newest first. One entry per run.
 
+## 2026-11-10 — Drawn arrows (second run, test fire)
+- **Category:** design polish
+- **What:** → ← ↗ aren't in the Archivo or Plex Mono subsets (checked the cmaps), so every arrow on the site fell back to a system font. They are now drawn: a 16px stroke SVG (`arrow()` in site.js, two static ones in index.html) for buttons, card links, back links, pager and inbox verdicts; a CSS mask (`--arrow-r`) for the pipeline steps on cards and the role ladder on work.html. Strokes follow `currentColor`, so hover colours and nudges still work; forced-colors fallback added. Fixed `.pager a span` so it no longer catches the arrow span.
+- **Checks:** tools/check.py all pages at 1440/390: pass. Screenshots of buttons, cards, pager, back link, inbox verdict and work ladder reviewed in light and dark.
+- **Preview:** not republished (optional).
+- **Suggested next:** content & story, backlog #1: the underwriter → builder scroll story on work.html.
+
 ## 2026-11-10 — Social preview + structured data
 - **Category:** SEO/meta/social preview
 - **What:** Link previews now show a card in the site's own style (stone paper, ledger rules, Archivo at full width, one cobalt rule, Plex Mono labels): `assets/og.png`, 1200×630, rendered from resume.json by `tools/make_og.py` (re-run if name, headline or role change). All pages get og:image (+ size, alt), og:url, og:site_name and `twitter:card` summary_large_image. Home adds a schema.org `Person` JSON-LD block built in site.js from resume.json (name, role, employer, location, schools, focus, LinkedIn); no facts hard-coded.
