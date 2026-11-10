@@ -1,6 +1,20 @@
 {
   "items": [
     {
+      "id": "lumos-small-business-credit-scoring",
+      "title": "Lumos and alternative credit scoring for small business",
+      "date": "2026-11-10",
+      "status": "Complete",
+      "summary": "What Lumos (Lumos Data) is, how its expected-loss score is built and what it does not disclose, set against bureau scores, cash-flow scoring and FICO SBSS, which the SBA stopped using for 7(a) Small Loans in March 2026. Independent studies show real but modest gains from alternative data, concentrated in thin-file borrowers.",
+      "tags": [
+        "Credit scoring",
+        "Small business",
+        "SBA",
+        "Alternative data"
+      ],
+      "file": "research/lumos-small-business-credit-scoring/index.md"
+    },
+    {
       "id": "ocr-spreading-vs-llm-extraction",
       "title": "OCR spreading tools vs LLMs for financial statement extraction",
       "date": "2026-11-10",

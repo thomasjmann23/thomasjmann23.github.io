@@ -2,6 +2,11 @@
 
 Newest first. One entry per run.
 
+## 2026-11-10 — Research: Lumos and alternative small-business credit scoring
+- **What:** Published `research.html?id=lumos-small-business-credit-scoring` (about 4,300 words, 4 SVG figures, 53 sources). Covers Lumos (Lumos Technologies / Lumos Data), bureau scores, cash-flow scoring, the SBA's March 2026 discontinuation of FICO SBSS for 7(a) Small Loans, independent evidence and governance. Queue item checked off.
+- **Checks:** tools/check.py all pages: pass. Article opened at 1440 and 390: figures, table and sources render, no horizontal overflow.
+- **Notes:** Lumos publishes no accuracy metrics and its website could not be fetched; the "faster portfolio data" premise from the queue is not supported by any public source and is flagged in the paper.
+
 ## 2026-11-10 — Research: OCR spreading tools vs LLMs
 - **What:** Published the first research paper, `research.html?id=ocr-spreading-vs-llm-extraction` (about 5,000 words, 5 hand-drawn SVG figures, 46 sources). Compares dedicated auto-spreading tools (Moody's, nCino, Abrigo, FlashSpread, Baker Hill) with general LLM extraction on accuracy, failure modes, auditability, cost and validation. Queue item checked off.
 - **Checks:** tools/check.py all pages: pass. Article opened at 1440 and 390: figures, table and sources render, no horizontal overflow (long source URLs carry `<wbr>` break hints).
