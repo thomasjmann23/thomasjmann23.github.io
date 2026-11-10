@@ -372,7 +372,7 @@
     const pauseBtn = $('.demo-pause');
     const tabs = $$('[role="tab"]', box);
     const demos = { 'lab-8k': eightK(), 'lab-inbox': inbox() };
-    let paused = false, visible = true, active = 'lab-8k';
+    let paused = false, visible = true, active = 'lab-inbox'; // inbox first until the 8-K feed uses real data
     const sync = () => Object.entries(demos).forEach(([id, d]) => d.allow(!paused && visible && !document.hidden && id === active));
     const setPaused = v => { paused = v; box.classList.toggle('paused', v); pauseBtn.textContent = v ? 'Play' : 'Pause'; pauseBtn.setAttribute('aria-pressed', String(v)); sync(); };
     const select = (tab, focus) => {

@@ -2,6 +2,10 @@
 
 Newest first. One entry per run.
 
+## 2026-11-10 — Inbox triage first in the lab
+- **What:** Thomas asked to prioritize Inbox triage over 8-K alerts until 8-K uses real data. Inbox is now the first, default tab; 8-K is second. Rule added to DAILY_INSTRUCTIONS.md.
+- **Checks:** tools/check.py all pages: pass. Verified Inbox is selected and running on load, 8-K panel hidden.
+
 ## 2026-11-10 — Drawn arrows (second run, test fire)
 - **Category:** design polish
 - **What:** → ← ↗ aren't in the Archivo or Plex Mono subsets (checked the cmaps), so every arrow on the site fell back to a system font. They are now drawn: a 16px stroke SVG (`arrow()` in site.js, two static ones in index.html) for buttons, card links, back links, pager and inbox verdicts; a CSS mask (`--arrow-r`) for the pipeline steps on cards and the role ladder on work.html. Strokes follow `currentColor`, so hover colours and nudges still work; forced-colors fallback added. Fixed `.pager a span` so it no longer catches the arrow span.
