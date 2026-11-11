@@ -175,6 +175,12 @@
   }
 
   /* ---------------- Work ---------------- */
+  // Underwriter → builder: each step's roles sit on one ruled line; CSS draws the pen down it on scroll
+  const careerStory = j => h('ol', { class: 'story', 'aria-label': `Roles held at ${j.org}, earliest first` },
+    j.story.map((st, i) => h('li', { class: 'step' },
+      h('span', { class: 'n', text: `${String(i + 1).padStart(2, '0')} · ${st.step}` }),
+      h('ul', { class: 'rungs' }, st.roles.map(r => h('li', { text: r }))),
+      h('p', { text: st.text }))));
   function renderWork(d) {
     $('[data-render="experience"]').replaceChildren(...d.experience.map((j, i) =>
       h('li', { class: 'job ' + (i ? 'reveal' : 'enter'), style: '--d:3' },
@@ -182,7 +188,7 @@
         h('div', {},
           h('h3', { text: j.org }),
           h('p', { class: 'role', text: j.role }),
-          j.progression ? h('ol', { class: 'ladder', 'aria-label': 'Roles held, earliest first' }, j.progression.map(r => h('li', { text: r }))) : null,
+          j.story ? careerStory(j) : null,
           h('ul', { class: 'hl' }, j.highlights.map(x => h('li', { text: x }))),
           j.award ? h('span', { class: 'award', text: '★ ' + j.award }) : null,
           h('ul', { class: 'chips', 'aria-label': 'Skills' }, j.skills.map(s => h('li', { class: 'chip', text: s })))))));

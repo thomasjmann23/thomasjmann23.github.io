@@ -2,6 +2,14 @@
 
 Newest first. One entry per run.
 
+## 2026-11-11 — Underwriter → builder scroll story
+- **Category:** content & story (backlog #1)
+- **What:** The bank entry on work.html now tells the career arc as three ruled steps (01 Underwrite, 02 Automate, 03 Build) carrying the four role titles. A cobalt pen line draws down the rule as you scroll (`view-timeline` + `animation-timeline`), and each title opens from condensed (72%) to full width on the Archivo width axis as it crosses the middle of the screen; ledger ticks fill in as each role is reached. Replaces the small mono role ladder. Data lives in `content/resume.json` (`experience[0].story`, replacing `progression`); the "Earlier: underwrote…" highlight moved into step 01/02, nothing new claimed. Reduced motion and browsers without scroll timelines show the finished state. Titles don't wrap at 390px (measured), so no layout shift while the width animates.
+- **PR:** see the PR for daily/2026-11-11-career-story.
+- **Checks:** tools/check.py all pages at 1440/390: ALL CHECKS PASSED (work CLS 0.000). Story screenshots reviewed at 0/50/100% scroll, light and dark, desktop and phone. Lighthouse not re-run (no loading or asset changes).
+- **Preview:** not republished (optional).
+- **Suggested next:** design polish, backlog #3 (hero name width responds to the pointer), or project showcases #2 (DeepDiligence Q&A replay).
+
 ## 2026-11-10 — Research: Lumos and alternative small-business credit scoring
 - **What:** Published `research.html?id=lumos-small-business-credit-scoring` (about 4,300 words, 4 SVG figures, 53 sources). Covers Lumos (Lumos Technologies / Lumos Data), bureau scores, cash-flow scoring, the SBA's March 2026 discontinuation of FICO SBSS for 7(a) Small Loans, independent evidence and governance. Queue item checked off.
 - **Checks:** tools/check.py all pages: pass. Article opened at 1440 and 390: figures, table and sources render, no horizontal overflow.

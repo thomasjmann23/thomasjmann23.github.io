@@ -22,11 +22,29 @@
       "role": "AVP, Credit Data Scientist",
       "start": "May 2023",
       "end": "Present",
-      "progression": [
-        "SBA Credit Specialist",
-        "SBA Senior Credit Specialist",
-        "SBA Credit Automation Consultant",
-        "AVP, Credit Data Scientist"
+      "story": [
+        {
+          "step": "Underwrite",
+          "roles": [
+            "SBA Credit Specialist",
+            "SBA Senior Credit Specialist"
+          ],
+          "text": "Underwrote SBA 7(a) and 7(a) Small loans; managed reapprovals, change memos and commitment letters."
+        },
+        {
+          "step": "Automate",
+          "roles": [
+            "SBA Credit Automation Consultant"
+          ],
+          "text": "Started automating the parts that ate the most time, beginning with document generation in VBA."
+        },
+        {
+          "step": "Build",
+          "roles": [
+            "AVP, Credit Data Scientist"
+          ],
+          "text": "Builds and advises on the bank's AI systems: LLM email triage, SEC-filing intelligence, credit memo pipelines and AI governance."
+        }
       ],
       "highlights": [
         "Internal AI consultant on a ground-up Loan Origination System rebuild, turning executive, developer and operations needs into specs.",
@@ -35,8 +53,7 @@
         "Advised executives on AI governance, leading to a company-wide policy restricting non-enterprise LLMs.",
         "Led an intern team building LLM pipelines for automated credit memo drafting, with human-in-the-loop review.",
         "Integrated OCR for tax document extraction in SBA loan workflows.",
-        "Automated loan portfolio changes and insight reporting.",
-        "Earlier: underwrote SBA 7(a) and 7(a) Small loans; managed reapprovals, change memos and commitment letters; automated document generation with VBA."
+        "Automated loan portfolio changes and insight reporting."
       ],
       "award": "2023 Rookie of the Year",
       "skills": [
