@@ -151,8 +151,67 @@
     $('[data-render="stats"]').replaceChildren(...d.stats.map(s =>
       h('div', { class: 'stat' }, h('div', { class: 'n', 'data-count': s.count ? s.value : null, text: s.value }), h('div', { class: 'l', text: s.label }))));
     countUp();
+    pressName();
     $('[data-render="featured"]').replaceChildren(...d.projects.filter(p => p.featured).map(projectCard));
     lab();
+  }
+
+  // Hero name: letters near the pointer press in, condensing on the width axis and
+  // getting a touch heavier, like a nib under pressure. Fine pointers only, never
+  // under reduced motion. Each letter keeps a fixed box (its measured rest width),
+  // so nothing around it moves: no layout shift, no feedback loop with the pointer.
+  function pressName() {
+    const el = $('.hero .name');
+    if (!el || reduceMotion || !matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    const letters = [];
+    let shown = null;
+    // Split only after the entrance has played, so the per-letter boxes never move during it
+    const split = () => {
+      const text = el.textContent.trim();
+      if (!text) return false;
+      shown = h('span', { class: 'press', 'aria-hidden': 'true' }, ...text.split(' ').flatMap((w, i) => [
+        i ? ' ' : null,
+        h('span', { class: 'word' }, ...[...w].map(c => { const s = h('span', { class: 'ch', text: c }); letters.push({ el: s, v: 0, x: 0, y: 0 }); return s; }))
+      ]));
+      el.replaceChildren(h('span', { class: 'sr-only', text }), shown);
+      return true;
+    };
+    const REST_W = 125, MIN_W = 90, REST_WT = 750, MAX_WT = 860;
+    let px = -1e4, py = -1e4, raf = 0, locked = false, fs = 100;
+    const lock = () => {
+      shown.classList.remove('locked');
+      letters.forEach(l => { l.el.style.width = ''; l.el.style.fontStretch = ''; l.el.style.fontWeight = ''; l.v = 0; });
+      const r = letters.map(l => l.el.getBoundingClientRect());
+      fs = parseFloat(getComputedStyle(el).fontSize) || 100;
+      letters.forEach((l, i) => { l.el.style.width = r[i].width + 'px'; l.x = r[i].left + r[i].width / 2 + scrollX; l.y = r[i].top + r[i].height / 2 + scrollY; });
+      shown.classList.add('locked');
+      locked = true;
+    };
+    const frame = () => {
+      raf = 0;
+      let moving = false;
+      const R = fs * .62;
+      for (const l of letters) {
+        const dx = (l.x - scrollX - px) / R, dy = (l.y - scrollY - py) / (R * 1.6);
+        const t = Math.exp(-(dx * dx + dy * dy));
+        l.v += (t - l.v) * .16;
+        if (Math.abs(t - l.v) > .002) moving = true; else l.v = t;
+        l.el.style.fontStretch = (REST_W - (REST_W - MIN_W) * l.v).toFixed(1) + '%';
+        l.el.style.fontWeight = Math.round(REST_WT + (MAX_WT - REST_WT) * l.v);
+      }
+      if (moving) raf = requestAnimationFrame(frame);
+    };
+    const kick = () => { if (locked && !raf) raf = requestAnimationFrame(frame); };
+    const hero = el.closest('.hero') || el;
+    hero.addEventListener('pointermove', e => { if (e.pointerType !== 'mouse' && e.pointerType !== 'pen') return; px = e.clientX; py = e.clientY; kick(); }, { passive: true });
+    hero.addEventListener('pointerleave', () => { px = py = -1e4; kick(); });
+    // Lock widths once the entrance stretch has played (and the font is in), re-lock on resize
+    let started = false;
+    const start = () => { if (started) return; started = true; if (split()) lock(); };
+    el.addEventListener('animationend', start, { once: true });
+    setTimeout(start, 3200); // fallback if animationend never fires
+    let rt = 0;
+    addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { if (shown) { cancelAnimationFrame(raf); raf = 0; lock(); } }, 150); });
   }
 
   // Animate numbers like "1,000+" once visible

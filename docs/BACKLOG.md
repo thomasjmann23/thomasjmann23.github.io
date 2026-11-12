@@ -4,13 +4,12 @@ Pick from the top unless yesterday's log suggests something better. Rotate categ
 
 ## Up next
 1. **Project showcases:** DeepDiligence walkthrough on its detail page: an animated Q&A replay (question → retrieved chunks highlight → answer), synthetic text, clearly labelled.
-2. **Design polish:** hero name responds to the pointer by varying its width axis (letters near the cursor widen slightly), pointer: fine only, reduced-motion safe. Must feel tactile, not gimmicky.
-3. **Motion:** text-split entrance for page titles (per-word mask reveal) shared across pages.
-4. **Performance:** subset the Archivo variable font further (only used glyphs) with fonttools/pyftsubset; it's ~90 KB now.
-5. **Accessibility:** screen-reader pass of the command menu (combobox/listbox semantics), project filter announcements, transitions not stealing focus. Add a visible focus ring style audit.
-6. **Downloadable résumé:** PDF generated from resume.json (`tools/make_resume_pdf.py`, reportlab), no phone/address. Note: inside the Artifact preview, download links are blocked; the button should only show on the real site.
-7. **Interactivity:** "AI governance" mini-explainer: an interactive policy decision tree (is this tool enterprise-approved? does it touch customer data?), generic, not the bank's actual policy.
-8. **Content:** each project detail page could show "What I'd do next" or "What it taught me", only from what the repo shows.
+2. **Motion:** text-split entrance for page titles (per-word mask reveal) shared across pages.
+3. **Performance:** subset the Archivo variable font further (only used glyphs) with fonttools/pyftsubset; it's ~90 KB now.
+4. **Accessibility:** screen-reader pass of the command menu (combobox/listbox semantics), project filter announcements, transitions not stealing focus. Add a visible focus ring style audit.
+5. **Downloadable résumé:** PDF generated from resume.json (`tools/make_resume_pdf.py`, reportlab), no phone/address. Note: inside the Artifact preview, download links are blocked; the button should only show on the real site.
+6. **Interactivity:** "AI governance" mini-explainer: an interactive policy decision tree (is this tool enterprise-approved? does it touch customer data?), generic, not the bank's actual policy.
+7. **Content:** each project detail page could show "What I'd do next" or "What it taught me", only from what the repo shows.
 
 ## Questions for Thomas
 - Any numbers you can share publicly for the email triage system or credit memo pipeline (time saved, accuracy, adoption)?
