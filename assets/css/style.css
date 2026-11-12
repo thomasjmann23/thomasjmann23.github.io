@@ -167,6 +167,8 @@ kbd { font: 500 11px var(--mono); padding: 1px 5px; border-radius: 3px; border: 
 .hero { padding: 96px 0 88px; display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); gap: 64px; align-items: end; }
 .hero h1 { font-size: clamp(64px, 10.5vw, 156px); line-height: .84; font-weight: 750; font-stretch: 125%; letter-spacing: -.045em; margin: 0 0 28px; }
 .hero h1 .name { display: block; }
+.hero .press .word { white-space: nowrap; }
+.hero .press.locked .ch { display: inline-block; text-align: center; }
 :root:not(.loading) .hero h1 .name { animation: stretch 1.4s var(--ease-out) both .05s; }
 @keyframes stretch { from { font-stretch: 62%; letter-spacing: -.02em; opacity: 0; } 40% { opacity: 1; } }
 .hero h1 .alt { display: block; font-size: .3em; line-height: 1.12; letter-spacing: -.01em; margin-top: 18px; max-width: 18ch; }
