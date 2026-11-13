@@ -1,6 +1,21 @@
 {
   "items": [
     {
+      "id": "ai-first-banks-small-business-lending",
+      "title": "AI-first banks in small-business lending: Live Oak, Huntington and Casca",
+      "date": "2026-11-13",
+      "status": "Complete",
+      "summary": "What Live Oak, Huntington and other US banks have publicly launched to put AI into small-business and SBA lending, and what they report. The Huntington–Casca link is confirmed but unexplained in public, Live Oak's Casca rollout is still a pilot, and no bank has yet published a measured result.",
+      "tags": [
+        "AI in lending",
+        "SBA",
+        "Small business",
+        "Banks",
+        "Model risk"
+      ],
+      "file": "research/ai-first-banks-small-business-lending/index.md"
+    },
+    {
       "id": "lumos-small-business-credit-scoring",
       "title": "Lumos and alternative credit scoring for small business",
       "date": "2026-11-10",
