@@ -2,6 +2,14 @@
 
 Newest first. One entry per run.
 
+## 2026-11-13 — DeepDiligence: replay a question
+- **Category:** project showcases (backlog #1)
+- **What:** The DeepDiligence detail page gets a "Replay a question" section. Two synthetic questions (over time / across companies, fictional Kestrel Logistics and Pinelake Foods filings): press Replay and the pipeline runs in four marked stages: every chunk gets a similarity bar and score, the list re-sorts itself by score (FLIP, transform only), the top 3 are kept with [1]–[3] ranks, and the answer is inked in word by word (cobalt drying to ink) with citation buttons. Hovering or focusing a citation lights its chunk and vice versa; clicking scrolls to it. The finished state is what renders at rest (nothing waits on scroll); reduced motion jumps straight to the finished answer. Data lives in `content/resume.json` (`projects[deepdiligence].replay`), labelled as synthetic and not output from the live app.
+- **PR:** see the PR for daily/2026-11-13-diligence-replay.
+- **Checks:** tools/check.py all pages at 1440/390: ALL CHECKS PASSED. Extra Playwright pass on the replay at 1440 light/dark and 390: no console errors, no horizontal overflow, CLS 0 during the replay, citation focus lights its chunk, reduced motion shows the finished state immediately. Screenshots reviewed at each stage. Lighthouse not re-run (no loading or asset changes).
+- **Preview:** not republished (optional).
+- **Suggested next:** motion & transitions, backlog #1 (per-word page-title reveal), or performance #2 (subset Archivo).
+
 ## 2026-11-13 — Research: AI-first banks in small-business lending
 - **Category:** research (research task, not the daily site loop)
 - **What:** New study `ai-first-banks-small-business-lending`: Live Oak and Huntington with Casca, plus Celtic, Colony, ConnectOne and Grasshopper; regulation (SR 26-2, Reg B, 1071, SBSS sunset). 4 SVG figures. Queue item checked off.
