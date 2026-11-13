@@ -2,6 +2,11 @@
 
 Newest first. One entry per run.
 
+## 2026-11-13 — Research: AI-first banks in small-business lending
+- **Category:** research (research task, not the daily site loop)
+- **What:** New study `ai-first-banks-small-business-lending`: Live Oak and Huntington with Casca, plus Celtic, Colony, ConnectOne and Grasshopper; regulation (SR 26-2, Reg B, 1071, SBSS sunset). 4 SVG figures. Queue item checked off.
+- **Checks:** tools/check.py; research.html?id=ai-first-banks-small-business-lending viewed at 1440 and 390.
+
 ## 2026-11-12 — Hero name presses under the pointer
 - **Category:** design polish (backlog #2)
 - **What:** On the home hero, letters of the name near the mouse press in like a nib under pressure: they condense on Archivo's width axis (125% → 90%) and get slightly heavier (750 → 860), easing back when the pointer leaves. Fine pointers with hover only; nothing under reduced motion or on touch. The name is split into letters only after the entrance stretch finishes, and each letter is then locked to its measured rest width, so nothing around it moves (no layout shift, no feedback loop). Screen readers get the name once via a `.sr-only` copy; the letter spans are `aria-hidden`. `pressName()` in site.js, name still comes from resume.json.
