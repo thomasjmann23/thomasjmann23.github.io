@@ -195,7 +195,87 @@
           "text": "For each question, retrieve the most relevant chunks and have Gemini answer through a LangChain QA chain, with sources shown."
         }
       ],
-      "featured": true
+      "featured": true,
+      "replay": {
+        "note": "Synthetic filings and fictional companies. Shows how one question moves through the pipeline; not output from the live app.",
+        "topK": 3,
+        "questions": [
+          {
+            "label": "Over time",
+            "q": "How did Kestrel Logistics describe fuel-price risk in FY2025 compared with FY2024?",
+            "chunks": [
+              {
+                "src": "Kestrel Logistics · 10-K FY2024 · Item 1A",
+                "text": "Fuel is our second-largest operating expense. Surcharge programs pass most increases through to customers, with a lag of several weeks.",
+                "score": 0.86
+              },
+              {
+                "src": "Kestrel Logistics · 10-K FY2024 · Item 7",
+                "text": "Revenue grew on higher volumes in regional freight, partly offset by lower spot rates.",
+                "score": 0.41
+              },
+              {
+                "src": "Kestrel Logistics · 10-K FY2025 · Item 1A",
+                "text": "Fuel prices remained volatile. Surcharges now cover a smaller share of our contracts after two large customers moved to fixed-rate terms.",
+                "score": 0.91
+              },
+              {
+                "src": "Kestrel Logistics · 10-K FY2025 · Item 7A",
+                "text": "We entered into diesel swap agreements covering part of expected fuel purchases for the next twelve months.",
+                "score": 0.83
+              },
+              {
+                "src": "Kestrel Logistics · 10-K FY2025 · Item 2",
+                "text": "We operate a network of owned and leased terminals across the Southeast and Midwest.",
+                "score": 0.22
+              },
+              {
+                "src": "Kestrel Logistics · 10-K FY2025 · Item 5",
+                "text": "Our common stock is listed on a national exchange; we paid no dividends during the year.",
+                "score": 0.17
+              }
+            ],
+            "answer": "The risk got sharper. In FY2024 Kestrel said surcharges passed most fuel increases to customers, after a lag of a few weeks [2]. In FY2025 it said surcharges covered fewer contracts once two large customers moved to fixed rates [1], and it added diesel swaps to hedge part of the coming year's fuel [3]."
+          },
+          {
+            "label": "Across companies",
+            "q": "Which company depends more on its largest customer: Kestrel Logistics or Pinelake Foods?",
+            "chunks": [
+              {
+                "src": "Kestrel Logistics · 10-K FY2025 · Item 1",
+                "text": "Our ten largest customers accounted for 38% of revenue; no single customer exceeded 9%.",
+                "score": 0.88
+              },
+              {
+                "src": "Kestrel Logistics · 10-K FY2025 · Item 7",
+                "text": "Renewals with our two largest customers moved to fixed-rate terms during the year.",
+                "score": 0.58
+              },
+              {
+                "src": "Pinelake Foods · 10-K FY2025 · Item 1",
+                "text": "We sell through grocery, club and foodservice channels in fourteen states.",
+                "score": 0.49
+              },
+              {
+                "src": "Pinelake Foods · 10-K FY2025 · Item 1A",
+                "text": "One national grocery chain accounted for 27% of net sales. Losing or materially reducing orders from this customer would hurt our results.",
+                "score": 0.93
+              },
+              {
+                "src": "Pinelake Foods · 10-K FY2025 · Note 4",
+                "text": "Concentration of credit risk: at year end, the same customer represented 31% of accounts receivable.",
+                "score": 0.87
+              },
+              {
+                "src": "Kestrel Logistics · 10-K FY2025 · Item 9A",
+                "text": "Management concluded that internal control over financial reporting was effective.",
+                "score": 0.12
+              }
+            ],
+            "answer": "Pinelake Foods, by a wide margin. One grocery chain made up 27% of its net sales [1] and 31% of its year-end receivables [3]. At Kestrel no single customer passed 9% of revenue, and the top ten together were 38% [2]."
+          }
+        ]
+      }
     },
     {
       "name": "SEC Filing Analyzer",
