@@ -319,9 +319,99 @@
             h('ul', { class: 'chips' }, p.skills.map(s => h('li', {}, h('a', { class: 'chip', href: `projects.html?skill=${encodeURIComponent(s)}`, text: s })))),
             p.demo ? h('p', { style: 'margin-top:16px' }, h('a', { href: p.demo, rel: 'noopener' }, 'Open the live app ', arrow('↗'))) : null,
             p.repoPublic && p.repo ? h('p', { style: 'margin-top:8px' }, h('a', { href: p.repo, rel: 'noopener' }, 'Source on GitHub ', arrow('↗'))) : null))),
+      p.replay ? replay(p.replay) : null,
       h('nav', { class: 'pager', 'aria-label': 'More projects' },
         h('a', { href: projectUrl(prev.id) }, h('span', {}, arrow('←'), ' Previous'), prev.name),
         h('a', { href: projectUrl(next.id) }, h('span', {}, 'Next ', arrow()), next.name)));
+  }
+
+  /* Q&A replay (synthetic): a question is embedded, every chunk gets a
+     similarity score, the list re-sorts itself (FLIP), the top k are kept
+     and the answer is written with citations back to them. The finished
+     state is what renders at rest; motion only runs when someone asks. */
+  function replay(r) {
+    const STAGES = ['Embed question', 'Score chunks', `Keep top ${r.topK}`, 'Answer'];
+    const qText = h('p', { class: 'rq' }), ans = h('p', { class: 'ra' }), list = h('ol', { class: 'chunks', 'aria-label': 'Chunks in the index' });
+    const stages = h('ol', { class: 'stages', 'aria-label': 'Pipeline stage' }, STAGES.map((t, i) => h('li', {}, h('span', { text: String(i + 1).padStart(2, '0') }), ' ' + t)));
+    const status = h('p', { class: 'sr-only', role: 'status' });
+    const playBtn = h('button', { class: 'pill play', type: 'button' }, 'Replay ', arrow());
+    const picks = r.questions.map((q, i) => h('button', { type: 'button', 'aria-pressed': String(i === 0), text: q.label }));
+    let cur = 0, timers = [], items = [];
+    const later = (fn, ms) => timers.push(setTimeout(fn, ms));
+    const stage = n => $$('li', stages).forEach((li, i) => { li.classList.toggle('on', i === n); li.classList.toggle('past', i < n); });
+    const light = (rank, on) => {
+      items.forEach(it => it.li.classList.toggle('lit', on && it.rank === rank));
+      $$('.cite', ans).forEach(c => c.classList.toggle('lit', on && +c.dataset.rank === rank));
+    };
+    const order = arr => {
+      const from = new Map(items.map(it => [it.li, it.li.getBoundingClientRect().top]));
+      list.append(...arr.map(it => it.li));
+      if (reduceMotion || !Element.prototype.animate) return;
+      arr.forEach((it, i) => {
+        const dy = from.get(it.li) - it.li.getBoundingClientRect().top;
+        if (dy) it.li.animate([{ transform: `translateY(${dy}px)` }, { transform: 'none' }], { duration: 760, delay: i * 30, easing: 'cubic-bezier(.65, 0, .25, 1)', fill: 'backwards' });
+      });
+    };
+    const build = q => {
+      qText.textContent = q.q;
+      const ranked = q.chunks.map((c, i) => ({ c, i })).sort((a, b) => b.c.score - a.c.score);
+      items = q.chunks.map((c, i) => {
+        const rank = ranked.findIndex(x => x.i === i) + 1;
+        const li = h('li', { class: rank <= r.topK ? 'hit' : 'miss', style: `--i:${i}` },
+          h('span', { class: 'rk', 'aria-hidden': 'true', text: rank <= r.topK ? `[${rank}]` : '' }),
+          h('span', { class: 'src', text: c.src }),
+          h('span', { class: 'sc' }, h('span', { class: 'bar', style: `--s:${c.score}` }), h('span', { class: 'v', text: c.score.toFixed(2) })),
+          h('span', { class: 'tx', text: c.text }),
+          h('span', { class: 'sr-only', text: rank <= r.topK ? `Retrieved as source ${rank}, similarity ${c.score.toFixed(2)}.` : `Not retrieved, similarity ${c.score.toFixed(2)}.` }));
+        li.addEventListener('mouseenter', () => rank <= r.topK && light(rank, true));
+        li.addEventListener('mouseleave', () => light(0, false));
+        return { li, rank, c };
+      });
+      list.replaceChildren(...[...items].sort((a, b) => a.rank - b.rank).map(it => it.li));
+      // Answer: words are spans so they can be written in place without reflow; [n] become citation buttons.
+      let w = 0;
+      ans.replaceChildren(...q.answer.split(/(\[\d+\])/).flatMap(part => {
+        const m = part.match(/^\[(\d+)\]$/);
+        if (m) {
+          const n = +m[1], src = q.chunks[ranked[n - 1].i].src;
+          const b = h('button', { class: 'cite', type: 'button', 'data-rank': n, style: `--w:${w++}`, 'aria-label': `Source ${n}: ${src}` }, String(n));
+          ['mouseenter', 'focus'].forEach(e => b.addEventListener(e, () => light(n, true)));
+          ['mouseleave', 'blur'].forEach(e => b.addEventListener(e, () => light(0, false)));
+          b.addEventListener('click', () => { const t = items.find(it => it.rank === n); t.li.scrollIntoView({ block: 'nearest', behavior: reduceMotion ? 'auto' : 'smooth' }); light(n, true); });
+          return [b];
+        }
+        return part.split(/(\s+)/).map(t => /^\s+$|^$/.test(t) ? t : h('span', { class: 'w', style: `--w:${w++}`, text: t }));
+      }));
+    };
+    const finish = () => { box.dataset.step = 'done'; stage(-1); playBtn.disabled = false; };
+    const play = () => {
+      timers.forEach(clearTimeout); timers = [];
+      const q = r.questions[cur];
+      build(q);
+      if (reduceMotion) { finish(); status.textContent = 'Answer ready, with three cited sources.'; return; }
+      playBtn.disabled = true; box.classList.remove('writing');
+      list.append(...items.map(it => it.li)); // back to document order
+      box.dataset.step = '0'; stage(0); status.textContent = 'Replaying: ' + q.q;
+      later(() => { box.dataset.step = '1'; stage(1); }, 700);
+      later(() => { box.dataset.step = '2'; stage(2); order([...items].sort((a, b) => a.rank - b.rank)); }, 2000);
+      later(() => { box.dataset.step = '3'; box.classList.add('writing'); stage(3); }, 3100);
+      later(() => { finish(); status.textContent = 'Answer ready, with three cited sources.'; }, 3100 + ans.querySelectorAll('.w, .cite').length * 28 + 500);
+    };
+    picks.forEach((b, i) => b.addEventListener('click', () => {
+      cur = i; picks.forEach(x => x.setAttribute('aria-pressed', String(x === b))); play();
+    }));
+    playBtn.addEventListener('click', play);
+    const box = h('section', { class: 'replay enter', style: '--d:6', 'aria-labelledby': 'replay-h', 'data-step': 'done' },
+      h('div', { class: 'replay-head' },
+        h('div', {}, h('h2', { id: 'replay-h', text: 'Replay a question' }), h('p', { class: 'demo-note', text: r.note })),
+        h('div', { class: 'replay-ctl' }, h('div', { class: 'seg', role: 'group', 'aria-label': 'Question' }, picks), playBtn)),
+      stages,
+      h('div', { class: 'replay-grid' },
+        h('div', { class: 'qa' }, h('h3', { text: 'Question' }), qText, h('h3', { text: 'Answer' }), ans),
+        h('div', {}, h('h3', { text: 'Retrieved from the index' }), list)),
+      status);
+    build(r.questions[0]);
+    return box;
   }
 
   /* ---------------- Research ---------------- */
