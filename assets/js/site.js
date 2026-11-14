@@ -91,6 +91,7 @@
       d.research = (research && research.items) || [];
       fillCommon(d);
       ({ index: renderHome, work: renderWork, projects: renderProjects, project: renderProject, research: renderResearch }[page] || (() => {}))(d);
+      splitTitles();
       setupPalette(d);
       if (page === 'index') personSchema(d);
     })
@@ -98,8 +99,50 @@
     .finally(() => {
       // Reveal once the webfont is ready too (max 1.2s), so the type doesn't jump
       const fonts = document.fonts ? document.fonts.ready : Promise.resolve();
-      Promise.race([fonts, new Promise(r => setTimeout(r, 1200))]).then(() => root.classList.remove('loading'));
+      Promise.race([fonts, new Promise(r => setTimeout(r, 1200))]).then(() => { root.classList.remove('loading'); revealTitles(); });
     });
+
+  /* ---------------- Page-title reveal ----------------
+     Each word of a page title is set like type on a press: it rises out of
+     a clipped line and opens from condensed to its full width on Archivo's
+     width axis, word by word. Each word box is locked to its measured rest
+     width first, so the widening happens inside it and nothing reflows (no
+     layout shift); the lock is dropped when the last word lands. Screen
+     readers get the title once from an .sr-only copy. Reduced motion: the
+     title is simply there. The home name has its own stretch, so it's skipped. */
+  function splitTitles() {
+    if (reduceMotion) return;
+    $$('.page-title').forEach(t => {
+      if (t.closest('.hero') || t.dataset.split) return;
+      t.dataset.split = '1';
+      t.classList.remove('enter');
+      let i = 0;
+      const words = node => [...node.childNodes].flatMap(n => {
+        if (n.nodeType === 3) return n.textContent.split(/(\s+)/).filter(Boolean).map(w =>
+          /^\s+$/.test(w) ? ' ' : h('span', { class: 'w' }, h('span', { class: 'wi', style: `--i:${i++}`, text: w })));
+        if (n.nodeType === 1) { const c = n.cloneNode(false); c.append(...words(n)); return [c]; }
+        return [];
+      });
+      const text = t.textContent.replace(/\s+/g, ' ').trim();
+      t.replaceChildren(h('span', { class: 'sr-only', text }), h('span', { class: 'tw', 'aria-hidden': 'true' }, ...words(t)));
+    });
+  }
+  function revealTitles() {
+    const go = () => $$('.page-title[data-split]').forEach(t => {
+      const ws = $$('.w', t);
+      if (!ws.length) return;
+      const r = ws.map(w => w.getBoundingClientRect().width);
+      ws.forEach((w, k) => { w.style.width = r[k] + 'px'; });
+      t.classList.add('title-go');
+      const last = $$('.wi', t).pop();
+      const done = () => { ws.forEach(w => { w.style.width = ''; }); t.classList.remove('title-go'); };
+      last.addEventListener('animationend', done, { once: true });
+      setTimeout(done, 2500); // fallback
+    });
+    // A prerendered page waits until it's actually shown, so the reveal is seen
+    if (document.prerendering) document.addEventListener('prerenderingchange', go, { once: true });
+    else go();
+  }
 
   function fillCommon(d) {
     $$('[data-field]').forEach(el => { const v = d[el.dataset.field]; if (v) el.textContent = v; });

@@ -2,6 +2,14 @@
 
 Newest first. One entry per run.
 
+## 2026-11-14 — Page titles set word by word
+- **Category:** motion & transitions (backlog #1)
+- **What:** Page titles on Work, Projects and Research now arrive word by word: each word rises out of a clipped line and opens from condensed (62%) to its full width on Archivo's width axis, 75ms apart, after the page has rendered. Each word box is locked to its measured rest width before the animation, so the widening happens inside it and nothing reflows (CLS 0); the lock is dropped when the last word lands. Screen readers get the title once from an `.sr-only` copy (visual words are `aria-hidden`). Prerendered pages wait for `prerenderingchange` so the reveal is actually seen; the cross-document `page-title` snapshot now only fades, so it doesn't double the rise. Reduced motion: no split, the title is just there. Home is skipped (the name has its own stretch). `splitTitles()` / `revealTitles()` in site.js.
+- **PR:** see the PR for daily/2026-11-14-title-reveal.
+- **Checks:** tools/check.py all pages at 1440/390: ALL CHECKS PASSED (CLS 0.000 on work/projects/research). Extra Playwright pass: frames at 150ms, 600ms and rest on each page, light and dark, desktop and phone; no console errors, no horizontal overflow, width locks released at rest. Lighthouse not re-run (no loading or asset changes).
+- **Preview:** not republished (optional).
+- **Suggested next:** performance, backlog #1 (subset Archivo), or accessibility #2 (command menu screen-reader pass).
+
 ## 2026-11-13 — DeepDiligence: replay a question
 - **Category:** project showcases (backlog #1)
 - **What:** The DeepDiligence detail page gets a "Replay a question" section. Two synthetic questions (over time / across companies, fictional Kestrel Logistics and Pinelake Foods filings): press Replay and the pipeline runs in four marked stages: every chunk gets a similarity bar and score, the list re-sorts itself by score (FLIP, transform only), the top 3 are kept with [1]–[3] ranks, and the answer is inked in word by word (cobalt drying to ink) with citation buttons. Hovering or focusing a citation lights its chunk and vice versa; clicking scrolls to it. The finished state is what renders at rest (nothing waits on scroll); reduced motion jumps straight to the finished answer. Data lives in `content/resume.json` (`projects[deepdiligence].replay`), labelled as synthetic and not output from the live app.

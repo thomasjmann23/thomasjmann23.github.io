@@ -66,7 +66,7 @@ html:active-view-transition-type(page)::view-transition-new(root) { animation: v
 @keyframes vt-out { to { opacity: 0; transform: translateX(-24px); } }
 @keyframes vt-in { from { opacity: 0; transform: translateX(32px); } }
 @keyframes vt-title-out { to { opacity: 0; font-stretch: 62%; } }
-@keyframes vt-title-in { from { opacity: 0; transform: translateY(.3em); } }
+@keyframes vt-title-in { from { opacity: 0; } }
 /* Card ⇄ detail: the clicked card is pulled from the file into the detail header.
    The sheet (image-pair) briefly takes the panel colour and a pen-blue top rule,
    then settles; the old card copy leaves first, the header copy arrives after. */
@@ -157,6 +157,11 @@ kbd { font: 500 11px var(--mono); padding: 1px 5px; border-radius: 3px; border: 
 /* Entrance after data renders */
 :root:not(.loading) .enter { animation: rise .7s var(--ease-out) both; animation-delay: calc(var(--d, 0) * 60ms); }
 @keyframes rise { from { opacity: 0; transform: translateY(14px); } }
+/* Page titles: words rise out of a clipped line and open to full width (JS splits them, see revealTitles) */
+.page-title .w { display: inline-block; clip-path: inset(-.5em -.4em -.18em -.4em); }
+.page-title .wi { display: inline-block; }
+.title-go .wi { animation: word-in .95s var(--ease-out) both; animation-delay: calc(var(--i) * 75ms + 60ms); }
+@keyframes word-in { from { transform: translateY(118%); font-stretch: 62%; } }
 /* Scroll-driven reveal where supported (content is visible without it) */
 @supports (animation-timeline: view()) {
   .reveal { animation: reveal linear both; animation-timeline: view(); animation-range: entry 0% entry 30%; }
