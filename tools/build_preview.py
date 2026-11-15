@@ -17,7 +17,7 @@ OUT = ROOT / "preview"
 # index.html itself is not listed: the host serves the main page (home.html) as index.html
 FILES = ["work.html", "projects.html", "project.html", "research.html",
          "assets/css/style.css", "assets/js/site.js", "assets/favicon.svg",
-         "assets/fonts/archivo-var.woff2", "assets/fonts/plex-mono-400.woff2", "assets/fonts/plex-mono-500.woff2",
+         "assets/fonts/archivo-core.woff2", "assets/fonts/archivo-ext.woff2", "assets/fonts/plex-mono-400.woff2", "assets/fonts/plex-mono-500.woff2",
          "content/resume.json", "research/index.json"]
 
 
