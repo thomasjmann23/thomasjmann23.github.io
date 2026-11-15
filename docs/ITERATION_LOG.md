@@ -2,6 +2,14 @@
 
 Newest first. One entry per run.
 
+## 2026-11-15 — Archivo split into core + extended
+- **Category:** performance (backlog #1)
+- **What:** The 90 KB Archivo variable font is now two files made by `tools/subset_fonts.py` (fonttools, both axes kept): `archivo-core.woff2` (47.5 KB: ASCII plus the handful of extra characters the site uses, found by scanning every page, script, resume.json and research article) is preloaded; `archivo-ext.woff2` (38.8 KB: the rest of Latin-1, € ™ ‹ › etc.) is declared with `unicode-range`, so a browser fetches it only if a page actually contains one of those characters. Today no page does. Unused OpenType features (frac/numr/dnom/locl) dropped. `fetch_fonts.sh`, `make_og.py` and `build_preview.py` updated; architecture note in DAILY_INSTRUCTIONS.md updated.
+- **PR:** see the PR for daily/2026-11-15-font-subset.
+- **Checks:** tools/check.py all pages at 1440/390: ALL CHECKS PASSED. Screenshots of work, projects, a project page and a research article are pixel-identical to main (reduced motion, 1440). Network check: every page loads only core; injecting "Café Zürich €" pulls in ext. Lighthouse home (mobile): Performance 98–99, Accessibility 100, Best Practices 100, SEO 100; simulated LCP 2.4 s → 2.1 s, total weight 232 → 191 KiB.
+- **Preview:** not republished (optional).
+- **Suggested next:** accessibility, backlog #1 (command menu screen-reader pass and focus-ring audit).
+
 ## 2026-11-14 — Page titles set word by word
 - **Category:** motion & transitions (backlog #1)
 - **What:** Page titles on Work, Projects and Research now arrive word by word: each word rises out of a clipped line and opens from condensed (62%) to its full width on Archivo's width axis, 75ms apart, after the page has rendered. Each word box is locked to its measured rest width before the animation, so the widening happens inside it and nothing reflows (CLS 0); the lock is dropped when the last word lands. Screen readers get the title once from an `.sr-only` copy (visual words are `aria-hidden`). Prerendered pages wait for `prerenderingchange` so the reveal is actually seen; the cross-document `page-title` snapshot now only fades, so it doesn't double the rise. Reduced motion: no split, the title is just there. Home is skipped (the name has its own stretch). `splitTitles()` / `revealTitles()` in site.js.

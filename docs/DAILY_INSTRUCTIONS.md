@@ -54,7 +54,7 @@ Organic, natural, but cutting edge. The concept is "a credit file, not a startup
 - Pages: `index.html`, `work.html`, `projects.html`, `project.html?id=…`, `research.html` (`?id=…` for an article). Each page shares the same head/nav/footer markup: change one, change all.
 - **All resume content lives in `content/resume.json`.** `assets/js/site.js` renders every page from it. Never hard-code resume facts in HTML or JS.
 - Page transitions: cross-document View Transitions (`@view-transition`, type `page`), shared element names (`p-<id>` project titles, `site-nav`, `page-title`, `nav-mark`), speculation rules for prerendering. Theme switch uses a same-document circular wipe. The page stays hidden (`.loading`) until resume.json has rendered and the webfont is ready (max 1.2s), which prevents layout shift.
-- Fonts are self-hosted woff2 (OFL licences in `assets/fonts/`); the Archivo file is preloaded. No Google Fonts.
+- Fonts are self-hosted woff2 (OFL licences in `assets/fonts/`); Archivo is split by `tools/subset_fonts.py` into `archivo-core.woff2` (ASCII + the few extras the site uses; preloaded) and `archivo-ext.woff2` (rest of Latin-1, fetched only via `unicode-range` when a page needs it). If you use a new non-ASCII character in headings or copy, check it's in core or accept the extra fetch. No Google Fonts.
 - Research section: see `docs/RESEARCH_CONTRACT.md`. Another agent will push research there. Don't edit its articles' substance; you may fix rendering.
 
 ## Content rules (strict)
