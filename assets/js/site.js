@@ -308,7 +308,7 @@
     const cards = d.projects.map(projectCard);
     $('[data-render="projects"]').replaceChildren(...cards);
     const priv = d.privateWork.map(p => {
-      const c = h('div', { class: 'reveal' }, h('h4', { text: p.name }), h('p', { text: p.description }),
+      const c = h('div', { class: 'reveal' }, h('h3', { text: p.name }), h('p', { text: p.description }),
         h('ul', { class: 'chips', 'aria-label': 'Skills' }, p.skills.map(s => h('li', { class: 'chip', text: s }))));
       c.dataset.skills = p.skills.join('|');
       return c;
@@ -326,7 +326,8 @@
       let n = 0;
       all.forEach(c => { const hit = s === 'All' || c.dataset.skills.split('|').includes(s); c.classList.toggle('dim', !hit); if (hit) n++; });
       const jobs = d.experience.filter(j => j.skills.includes(s)).map(j => j.org);
-      status.textContent = s === 'All' ? '' : `${s} · ${n} project${n === 1 ? '' : 's'}` + (jobs.length ? ` · used at ${jobs.join(', ')}` : '');
+      // Always say something, so screen readers hear the result of every press (including "All").
+      status.textContent = s === 'All' ? `All skills · ${n} projects` : `${s} · ${n} project${n === 1 ? '' : 's'}` + (jobs.length ? ` · used at ${jobs.join(', ')}` : '');
     };
     bar.addEventListener('click', e => {
       const b = e.target.closest('button'); if (!b) return;
@@ -467,7 +468,8 @@
         h('p', { class: 'label enter', text: 'Research' }),
         h('h1', { class: 'page-title enter', style: '--d:1' }, 'Notes from ', h('span', { class: 'alt', text: 'the frontier.' })),
         h('p', { class: 'enter', style: '--d:2', text: 'Longer investigations into AI in banking and credit, AI governance, and how people adopt (and misuse) AI tools.' })),
-      h('section', { class: 'wrap', 'aria-label': 'Research list' },
+      h('section', { class: 'wrap', 'aria-labelledby': 'studies-h' },
+        h('h2', { class: 'sr-only', id: 'studies-h', text: 'Studies' }),
         items.length
           ? h('div', { class: 'cards' }, items.map(x => h('a', { class: 'card reveal r-card', href: `research.html?id=${encodeURIComponent(x.id)}` },
               h('span', { class: 'meta', text: [x.date, x.status].filter(Boolean).join(' · ') }),

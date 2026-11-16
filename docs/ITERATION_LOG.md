@@ -2,6 +2,14 @@
 
 Newest first. One entry per run.
 
+## 2026-11-16 — Accessibility pass: headings, filter announcements, high-contrast states
+- **Category:** accessibility (backlog #1)
+- **What:** Audited every page with axe-core 4.10 (light/dark, 1440/390, plus the command menu open and with no matches) and a Tab/Shift+Tab focus walk measuring each focus ring's contrast and whether the sticky nav hides it. The command menu was already clean (combobox + listbox, `aria-activedescendant`, debounced result count, focus returned to the opener) and every focus stop has a cobalt ring ≥ 3:1 in both themes, unobscured by the nav. Fixed what the audit found: (1) heading levels jumped h1 → h3 on Work, Projects and Research; each list section now has a visually hidden h2 ("Experience", "Selected projects", "Studies") that labels the section, and the "At the bank" items moved from h4 to h3 (same look). (2) Choosing "All" in the Projects skill filter now announces "All skills · N projects" instead of silence. (3) Windows High Contrast / forced colours dropped the backgrounds that mark the chosen command, filter pill, demo segment and inbox lane, so the selection was invisible; those now use the system Highlight colours, the active lab tab gets an underline and the menu input a Highlight ring. `tools/check.py` now fails on skipped heading levels.
+- **PR:** see the PR for daily/2026-11-16-a11y-cmdmenu.
+- **Checks:** tools/check.py all pages at 1440/390: ALL CHECKS PASSED. axe-core: 0 violations on all 20 page/theme/width combinations and the open/empty command menu (was 3 heading-order violations per theme/width). Forced-colours screenshots of the menu and filters reviewed. Normal screenshots pixel-identical to main except the running home demo. Lighthouse not re-run (no loading or asset changes).
+- **Preview:** not republished (optional).
+- **Suggested next:** content & story, backlog #1 (downloadable résumé PDF from resume.json).
+
 ## 2026-11-16 — Research: TD Credit Assist and AI copilots for credit analysts
 - **Category:** research (scheduled research task)
 - **What:** New study `td-credit-assist-ai-copilots` (~5,800 words, 57 sources, 4 SVG figures, 2 tables): what TD Bank U.S. disclosed about TD Credit Assist (Oct 2026), TD's wider AI programme, peer copilots (DBS, Moody's, S&P, nCino, Abrigo) and governance (SR 26-2, OSFI E-23, OSFI gen-AI bulletin, Reg B). Added to the top of research/index.json; queue item checked off.

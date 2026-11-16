@@ -4,7 +4,7 @@
 
 With no URL it serves the repo locally. For each page and width (1440, 390):
 console errors, layout shift, horizontal overflow, alt text, named controls,
-one h1, rendered content, page weight. Also: light + reduced-motion pass,
+one h1, no skipped heading levels, rendered content, page weight. Also: light + reduced-motion pass,
 command menu opens with Ctrl+K and navigates, theme toggle works.
 Screenshots go to tools/shots/. Exits 1 if anything fails.
 Needs `pip install playwright`; set PLAYWRIGHT_BROWSERS_PATH=/opt/pw-browsers if Chromium lives there.
@@ -58,6 +58,11 @@ AUDIT = """(sel) => ({
   imgsNoAlt: [...document.images].filter(i => !i.hasAttribute('alt')).length,
   unnamed: [...document.querySelectorAll('button, a')].filter(b => !(b.getAttribute('aria-label') || b.textContent.trim())).map(b => b.outerHTML.slice(0, 80)),
   h1: document.querySelectorAll('h1').length,
+  headingSkips: (() => { let last = 0; const out = [];
+    for (const el of document.querySelectorAll('h1, h2, h3, h4, h5, h6')) {
+      if (el.closest('[hidden], [aria-hidden="true"], dialog:not([open])')) continue;
+      const lv = +el.tagName[1]; if (last && lv > last + 1) out.push(`h${last}→h${lv} "${el.textContent.trim().slice(0, 30)}"`); last = lv; }
+    return out; })(),
   dupIds: (() => { const ids = [...document.querySelectorAll('[id]')].map(e => e.id); return ids.filter((x, i) => ids.indexOf(x) !== i); })(),
   overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
 })"""
@@ -94,6 +99,7 @@ def check_page(browser, url, name, sel, width, outdir):
     if a["imgsNoAlt"]: problems.append(f"{tag}: images without alt")
     if a["unnamed"]: problems.append(f"{tag}: unnamed controls {a['unnamed']}")
     if a["h1"] != 1: problems.append(f"{tag}: {a['h1']} h1 elements")
+    if a["headingSkips"]: problems.append(f"{tag}: heading levels skip {a['headingSkips'][:3]}")
     if a["dupIds"]: problems.append(f"{tag}: duplicate ids {a['dupIds']}")
     if not a["rendered"] or a["stillLoading"]: problems.append(f"{tag}: content did not render ({sel})")
     if total["bytes"] > MAX_BYTES: problems.append(f"{tag}: page weight {total['bytes']/1e6:.2f} MB")

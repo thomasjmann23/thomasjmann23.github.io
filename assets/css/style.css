@@ -288,7 +288,7 @@ kbd { font: 500 11px var(--mono); padding: 1px 5px; border-radius: 3px; border: 
 .private { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 0 32px; }
 .private > div { padding: 20px 0; border-top: 1px dashed var(--line-2); transition: opacity .3s; }
 .private > div.dim { opacity: .22; }
-.private h4 { font-size: 17px; margin-bottom: 6px; }
+.private h3 { font-size: 17px; margin-bottom: 6px; }
 .private p { font-size: 14.5px; color: var(--muted); margin-bottom: 12px; }
 .sub-head { display: flex; gap: 14px; align-items: baseline; flex-wrap: wrap; margin: 72px 0 8px; }
 .sub-head h2 { font-size: 28px; font-stretch: 112%; }
@@ -506,3 +506,10 @@ kbd { font: 500 11px var(--mono); padding: 1px 5px; border-radius: 3px; border: 
   body::after { display: none; }
 }
 @media (forced-colors: active) { .chunks .bar::after, .flow li + li::before, .story::after, .rungs li::before { background: CanvasText; } }
+/* Windows High Contrast drops author backgrounds, which is how chosen states are drawn: use system Highlight instead */
+@media (forced-colors: active) {
+  .palette li[aria-selected="true"], .seg button[aria-pressed="true"], .filters .pill[aria-pressed="true"], .lane button[aria-pressed="true"] { forced-color-adjust: none; background: Highlight; color: HighlightText; }
+  .palette li[aria-selected="true"] small { color: HighlightText; opacity: 1; }
+  .lab-tabs [role="tab"][aria-selected="true"] { text-decoration: underline 2px; text-underline-offset: 6px; }
+  .palette input:focus-visible { outline: 2px solid Highlight; outline-offset: -2px; }
+}
