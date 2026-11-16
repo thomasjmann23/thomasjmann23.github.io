@@ -1,6 +1,21 @@
 {
   "items": [
     {
+      "id": "td-credit-assist-ai-copilots",
+      "title": "TD Credit Assist and the rise of AI copilots for credit analysts",
+      "date": "2026-11-16",
+      "status": "Complete",
+      "summary": "What TD Bank U.S. has disclosed about Credit Assist, its October 2026 multi-agent tool that drafts commercial credit memos, how it compares with DBS and vendor copilots, and the governance banks put around such tools. Every performance figure is TD's own, from pre-launch testing, and US model risk guidance leaves these tools out of scope.",
+      "tags": [
+        "AI in lending",
+        "Credit memos",
+        "Agentic AI",
+        "Banks",
+        "Model risk"
+      ],
+      "file": "research/td-credit-assist-ai-copilots/index.md"
+    },
+    {
       "id": "ai-first-banks-small-business-lending",
       "title": "AI-first banks in small-business lending: Live Oak, Huntington and Casca",
       "date": "2026-11-13",

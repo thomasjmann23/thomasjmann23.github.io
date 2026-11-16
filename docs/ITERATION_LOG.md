@@ -2,6 +2,11 @@
 
 Newest first. One entry per run.
 
+## 2026-11-16 — Research: TD Credit Assist and AI copilots for credit analysts
+- **Category:** research (scheduled research task)
+- **What:** New study `td-credit-assist-ai-copilots` (~5,800 words, 57 sources, 4 SVG figures, 2 tables): what TD Bank U.S. disclosed about TD Credit Assist (Oct 2026), TD's wider AI programme, peer copilots (DBS, Moody's, S&P, nCino, Abrigo) and governance (SR 26-2, OSFI E-23, OSFI gen-AI bulletin, Reg B). Added to the top of research/index.json; queue item checked off.
+- **Checks:** tools/check.py all pages at 1440/390: pass. research.html?id=td-credit-assist-ai-copilots reviewed at 1440 and 390: article, tables and figures render, no overflow, no console errors.
+
 ## 2026-11-15 — Archivo split into core + extended
 - **Category:** performance (backlog #1)
 - **What:** The 90 KB Archivo variable font is now two files made by `tools/subset_fonts.py` (fonttools, both axes kept): `archivo-core.woff2` (47.5 KB: ASCII plus the handful of extra characters the site uses, found by scanning every page, script, resume.json and research article) is preloaded; `archivo-ext.woff2` (38.8 KB: the rest of Latin-1, € ™ ‹ › etc.) is declared with `unicode-range`, so a browser fetches it only if a page actually contains one of those characters. Today no page does. Unused OpenType features (frac/numr/dnom/locl) dropped. `fetch_fonts.sh`, `make_og.py` and `build_preview.py` updated; architecture note in DAILY_INSTRUCTIONS.md updated.
