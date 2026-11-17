@@ -26,7 +26,7 @@
     document.documentElement.classList.add('loading');
     try { var t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
   </script>
-  <script type="speculationrules">{"prerender":[{"where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":"/content/*"}}]},"eagerness":"moderate"}]}</script>
+  <script type="speculationrules">{"prerender":[{"where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":"/content/*"}},{"not":{"href_matches":"/assets/*"}}]},"eagerness":"moderate"}]}</script>
 </head>
 <body data-page="index">
   <a class="skip" href="#main">Skip to content</a>
@@ -117,6 +117,7 @@
             <button class="btn primary copy-email" type="button">Copy email</button>
             <a class="btn" data-href="mailto">Email</a>
             <a class="btn" data-href="linkedin" rel="noopener">LinkedIn</a>
+            <a class="btn" href="assets/thomas-mann-resume.pdf" download data-resume hidden>Résumé <small class="btn-meta">PDF</small> <span class="arrow down" aria-hidden="true"><svg viewBox="0 0 16 16" focusable="false"><path d="M8 2v9M4 7.5l4 4 4-4M3 14h10"/></svg></span></a>
           </div>
           <p class="copy-status" role="status"></p>
         </div>

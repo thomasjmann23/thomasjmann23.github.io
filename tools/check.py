@@ -5,10 +5,12 @@
 With no URL it serves the repo locally. For each page and width (1440, 390):
 console errors, layout shift, horizontal overflow, alt text, named controls,
 one h1, no skipped heading levels, rendered content, page weight. Also: light + reduced-motion pass,
-command menu opens with Ctrl+K and navigates, theme toggle works.
+command menu opens with Ctrl+K and navigates, theme toggle works,
+résumé PDF is current (tools/resume_pdf.stamp) and its download link works.
 Screenshots go to tools/shots/. Exits 1 if anything fails.
 Needs `pip install playwright`; set PLAYWRIGHT_BROWSERS_PATH=/opt/pw-browsers if Chromium lives there.
 """
+import hashlib
 import http.server
 import json
 import os
@@ -156,7 +158,22 @@ def main():
         pg.screenshot(path=str(outdir / "project-after-theme.png"))
         if errs:
             problems.append(f"interaction errors: {errs}")
+
+        # Résumé PDF: shown on the real site and served
+        pg.goto(base + "work.html", wait_until="networkidle")
+        link = pg.locator("[data-resume] a[download]")
+        if not link.is_visible():
+            problems.append("résumé download link not visible on work.html")
+        else:
+            r = pg.request.get(base + link.get_attribute("href"))
+            if r.status != 200 or not r.body().startswith(b"%PDF"):
+                problems.append(f"résumé PDF not served ({r.status})")
         browser.close()
+
+    stamp = ROOT / "tools/resume_pdf.stamp"
+    want = hashlib.sha256((ROOT / "content/resume.json").read_bytes()).hexdigest()
+    if not stamp.exists() or stamp.read_text().strip() != want:
+        problems.append("résumé PDF is stale: run python3 tools/make_resume_pdf.py")
     print("\n".join(problems) if problems else "ALL CHECKS PASSED")
     sys.exit(1 if problems else 0)
 

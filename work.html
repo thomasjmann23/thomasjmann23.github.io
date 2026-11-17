@@ -26,7 +26,7 @@
     document.documentElement.classList.add('loading');
     try { var t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
   </script>
-  <script type="speculationrules">{"prerender":[{"where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":"/content/*"}}]},"eagerness":"moderate"}]}</script>
+  <script type="speculationrules">{"prerender":[{"where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":"/content/*"}},{"not":{"href_matches":"/assets/*"}}]},"eagerness":"moderate"}]}</script>
 </head>
 <body data-page="work">
   <a class="skip" href="#main">Skip to content</a>
@@ -53,6 +53,7 @@
       <p class="label enter">Career</p>
       <h1 class="page-title enter" style="--d:1">From underwriter <span class="alt">to AI builder.</span></h1>
       <p class="enter" style="--d:2">I learned credit by underwriting SBA loans, then started automating the parts that ate the most time. That turned into building the bank's AI systems.</p>
+      <div class="cta enter" style="--d:3" data-resume hidden><a class="btn" href="assets/thomas-mann-resume.pdf" download>Download résumé <small class="btn-meta">PDF · 1 page</small> <span class="arrow down" aria-hidden="true"><svg viewBox="0 0 16 16" focusable="false"><path d="M8 2v9M4 7.5l4 4 4-4M3 14h10"/></svg></span></a></div>
     </header>
     <section class="wrap" aria-labelledby="exp-h">
       <h2 class="sr-only" id="exp-h">Experience</h2>
