@@ -151,6 +151,9 @@ kbd { font: 500 11px var(--mono); padding: 1px 5px; border-radius: 3px; border: 
 .arrow { display: inline-block; transition: transform .35s var(--ease-out); }
 .arrow svg { display: block; width: .85em; height: .85em; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; transform: translateY(.06em); }
 .btn:hover .arrow { transform: translateX(4px); }
+.btn:hover .arrow.down { transform: translateY(2px); }
+.btn-meta { font: 11px var(--mono); letter-spacing: .04em; opacity: .7; }
+[data-resume][hidden] { display: none; }
 .cta { display: flex; flex-wrap: wrap; gap: 10px; }
 .chip { display: inline-flex; font: 12px var(--mono); color: var(--muted); border: 1px solid var(--line); border-radius: 3px; padding: 2px 7px; }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; }

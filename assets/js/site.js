@@ -144,6 +144,9 @@
     else go();
   }
 
+  const RESUME = 'assets/thomas-mann-resume.pdf';
+  const hasResume = /^https?:$/.test(location.protocol) && /(^|\.)github\.io$|^localhost$|^127\.0\.0\.1$/.test(location.hostname);
+
   function fillCommon(d) {
     $$('[data-field]').forEach(el => { const v = d[el.dataset.field]; if (v) el.textContent = v; });
     $$('[data-href="mailto"]').forEach(a => { a.href = 'mailto:' + d.contact.email; });
@@ -152,6 +155,8 @@
     $$('[data-href="linkedin"]').forEach(a => { a.href = d.contact.linkedin; });
     $$('.year').forEach(e => { e.textContent = new Date().getFullYear(); });
     $$('.copy-email').forEach(b => b.addEventListener('click', () => copyEmail(d.contact.email)));
+    // The résumé PDF ships only with the real site; the private preview has no file to download
+    if (hasResume) $$('[data-resume]').forEach(el => { el.hidden = false; });
   }
 
   // Structured data for search engines, built from resume.json so facts live in one place
@@ -514,6 +519,7 @@
       { t: 'Email Thomas', s: 'action', run: () => { location.href = 'mailto:' + d.contact.email; } },
       { t: 'Copy email address', s: 'action', run: () => copyEmail(d.contact.email) },
       { t: 'Open LinkedIn', s: 'action', run: () => window.open(d.contact.linkedin, '_blank', 'noopener') },
+      ...(hasResume ? [{ t: 'Download résumé (PDF)', s: 'action', k: 'cv resume pdf', run: () => { const a = h('a', { href: RESUME, download: '' }); document.body.append(a); a.click(); a.remove(); } }] : []),
       { t: 'Toggle light / dark theme', s: 'action', run: toggleTheme }
     ];
     let shown = cmds, sel = 0;
