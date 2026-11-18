@@ -268,6 +268,36 @@ kbd { font: 500 11px var(--mono); padding: 1px 5px; border-radius: 3px; border: 
 .inbox-why { min-height: 40px; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
 .inbox-why b { color: var(--ink); font-weight: 600; }
 
+/* AI use check: answers stack like conditions on a credit file; the outcome is stamped wide */
+.policy { display: flex; flex-direction: column; min-height: 388px; border-top: 1px solid var(--line); }
+.case-line { padding: 8px 2px; font: 12px/1.45 var(--mono); color: var(--muted); border-bottom: 1px solid var(--line); }
+.trail li { display: grid; grid-template-columns: 26px 1fr auto; gap: 10px; align-items: baseline; padding: 7px 2px; border-bottom: 1px solid var(--line); font-size: 13px; line-height: 1.35; color: var(--muted); animation: trail-in .45s var(--ease-out); }
+@keyframes trail-in { from { background: var(--accent-wash); transform: translateY(8px); opacity: 0; } }
+.policy .qn { font: 500 11px var(--mono); color: var(--faint); }
+.trail .ans { font: 500 10.5px var(--mono); text-transform: uppercase; letter-spacing: .05em; padding: 2px 6px; border: 1px solid var(--line-2); border-radius: 3px; color: var(--ink); }
+.step { padding: 14px 2px 0; }
+.ask { display: grid; grid-template-columns: 26px 1fr; gap: 4px 10px; animation: ask-in .45s var(--ease-out); }
+@keyframes ask-in { from { opacity: 0; transform: translateY(10px); } }
+.ask .qn { padding-top: 3px; }
+.ask .qt { font-size: 16px; font-weight: 600; line-height: 1.3; }
+.ask .hint, .ask .answers { grid-column: 2; }
+.ask .hint { font-size: 13px; color: var(--muted); }
+.ask .answers { display: flex; gap: 8px; margin-top: 10px; }
+.policy .btn { height: 40px; padding: 0 16px; font-size: 14px; }
+.ask .answers .btn { min-width: 76px; justify-content: center; }
+.verdict-card { display: grid; gap: 6px; padding-left: 14px; border-left: 2px solid var(--tone); --tone: var(--info); }
+.verdict-card.high { --tone: var(--high); }
+.verdict-card.watch { --tone: var(--watch); }
+.verdict-card .stamp { font: 500 11px var(--mono); text-transform: uppercase; letter-spacing: .06em; color: var(--tone); }
+.verdict-card .out { font-size: 26px; line-height: 1.05; font-weight: 750; font-stretch: 112%; letter-spacing: -.02em; outline-offset: 4px; animation: stamp .8s var(--ease-out) both; }
+.verdict-card .why { font-size: 13.5px; color: var(--muted); max-width: 52ch; }
+.verdict-card .v-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; width: 100%; }
+@keyframes stamp { from { font-stretch: 62%; opacity: 0; } 40% { opacity: 1; } }
+.cases { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: auto; padding-top: 12px; border-top: 1px solid var(--line); }
+.cases .label { margin-right: 4px; }
+.cases .pill[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+@media (max-width: 640px) { .policy { min-height: 428px; } .verdict-card .out { font-size: 23px; } }
+
 /* ---------- Project cards (an index, not a grid of boxes) ---------- */
 .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 0 32px; }
 .card { display: grid; gap: 12px; align-content: start; padding: 24px 0 28px; border-top: 1px solid var(--line-2); text-decoration: none; color: inherit; transition: opacity .3s; }
@@ -508,10 +538,11 @@ kbd { font: 500 11px var(--mono); padding: 1px 5px; border-radius: 3px; border: 
   .site-nav, .demo, .filters, .cta, .footer, .palette { display: none !important; }
   body::after { display: none; }
 }
-@media (forced-colors: active) { .chunks .bar::after, .flow li + li::before, .story::after, .rungs li::before { background: CanvasText; } }
+@media (forced-colors: active) { .verdict-card { border-left-color: CanvasText; }
+  .chunks .bar::after, .flow li + li::before, .story::after, .rungs li::before { background: CanvasText; } }
 /* Windows High Contrast drops author backgrounds, which is how chosen states are drawn: use system Highlight instead */
 @media (forced-colors: active) {
-  .palette li[aria-selected="true"], .seg button[aria-pressed="true"], .filters .pill[aria-pressed="true"], .lane button[aria-pressed="true"] { forced-color-adjust: none; background: Highlight; color: HighlightText; }
+  .palette li[aria-selected="true"], .seg button[aria-pressed="true"], .filters .pill[aria-pressed="true"], .cases .pill[aria-pressed="true"], .lane button[aria-pressed="true"] { forced-color-adjust: none; background: Highlight; color: HighlightText; }
   .palette li[aria-selected="true"] small { color: HighlightText; opacity: 1; }
   .lab-tabs [role="tab"][aria-selected="true"] { text-decoration: underline 2px; text-underline-offset: 6px; }
   .palette input:focus-visible { outline: 2px solid Highlight; outline-offset: -2px; }
