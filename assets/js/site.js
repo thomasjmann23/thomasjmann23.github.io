@@ -569,7 +569,7 @@
     });
   }
 
-  /* ---------------- The lab: two demos behind tabs (synthetic data) ----------------
+  /* ---------------- The lab: three demos behind tabs (synthetic data) ----------------
      One Pause button and one visibility check drive whichever tab is open;
      the hidden demo never runs. Each demo also holds still while the pointer
      or focus is inside it, so nothing moves under the reader. */
@@ -577,7 +577,7 @@
     const box = $('.demo'); if (!box) return;
     const pauseBtn = $('.demo-pause');
     const tabs = $$('[role="tab"]', box);
-    const demos = { 'lab-8k': eightK(), 'lab-inbox': inbox() };
+    const demos = { 'lab-8k': eightK(), 'lab-inbox': inbox(), 'lab-policy': policy() };
     let paused = false, visible = true, active = 'lab-inbox'; // inbox first until the 8-K feed uses real data
     const sync = () => Object.entries(demos).forEach(([id, d]) => d.allow(!paused && visible && !document.hidden && id === active));
     const setPaused = v => { paused = v; box.classList.toggle('paused', v); pauseBtn.textContent = v ? 'Play' : 'Pause'; pauseBtn.setAttribute('aria-pressed', String(v)); sync(); };
@@ -588,6 +588,7 @@
         $('#' + t.getAttribute('aria-controls')).hidden = !on;
       });
       active = tab.getAttribute('aria-controls');
+      pauseBtn.hidden = !demos[active].moves; // the decision tree never moves on its own
       if (focus) tab.focus();
       sync();
     };
@@ -611,7 +612,7 @@
     const run = () => { clearInterval(timer); timer = allowed && !hovering ? setInterval(fn, ms) : 0; };
     ['mouseenter', 'focusin'].forEach(ev => el.addEventListener(ev, () => { hovering = true; run(); }));
     ['mouseleave', 'focusout'].forEach(ev => el.addEventListener(ev, () => { hovering = false; run(); }));
-    return { allow: v => { allowed = v; run(); } };
+    return { allow: v => { allowed = v; run(); }, moves: true };
   }
   const clockText = m => `${String(Math.floor(m / 60) % 24).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
   const pickNot = (n, last) => { let i; do { i = Math.floor(Math.random() * n); } while (i === last && n > 1); return i; };
@@ -711,5 +712,85 @@
     [0, 4, 8, 1, 9, 5, 10].forEach(i => file(MAIL[i]));
     last = 10; next();
     return ticker(panel, next, 3400);
+  }
+
+  /* AI use check: a generic decision tree, answered one question at a time.
+     Answers stack up as a ruled trail (like conditions on a credit file) and
+     the outcome is stamped wide on the Archivo width axis. Example cases play
+     the answers in for you. Nothing moves unless someone asks it to. */
+  function policy() {
+    const panel = $('#lab-policy'), trail = $('.trail', panel), step = $('.step', panel), cases = $('.cases', panel);
+    const status = h('p', { class: 'sr-only', role: 'status' }), caseLine = h('p', { class: 'case-line' });
+    $('.policy', panel).prepend(caseLine); panel.append(status);
+    const Q = {
+      approved: { q: 'Is the tool enterprise-approved?', hint: 'Licensed by the firm, under contract, and your inputs are not used to train it.', s: 'Enterprise-approved tool?', yes: 'stakes', no: 'public' },
+      public: { q: 'Is everything you would type already public?', hint: 'No customer, borrower, deal or internal data. Not even a name.', s: 'Only public information?', yes: 'limited', no: 'stop' },
+      stakes: { q: 'Will the output shape a credit decision or reach a customer?', hint: 'A memo, a risk rating, a decline reason, a letter or a reply.', s: 'Feeds a decision or reaches a customer?', yes: 'review', no: 'data' },
+      review: { q: 'Will a named person check every output before it is used?', hint: 'Someone accountable who reads it in full, not a spot check.', s: 'A named reviewer reads every output?', yes: 'controls', no: 'escalate' },
+      data: { q: 'Does it use customer or borrower data?', hint: 'Statements, tax returns, account details, a borrower’s emails.', s: 'Uses customer or borrower data?', yes: 'minimum', no: 'go' }
+    };
+    const OUT = {
+      stop: { tone: 'high', tag: 'Stop', h: 'Don’t paste it', t: 'An unapproved tool may keep what you type and train on it. Use the approved tool, or cut the prompt down to public information.' },
+      limited: { tone: 'watch', tag: 'Limited', h: 'Public info only', t: 'Fine for learning or a rough first draft, where your firm allows unapproved tools at all; many block them. Keep the output out of any decision.' },
+      escalate: { tone: 'high', tag: 'Not yet', h: 'Add a human first', t: 'Output that shapes a credit decision or reaches a customer needs an accountable reviewer. Design that checkpoint, then take it to model risk or the governance group.' },
+      controls: { tone: 'watch', tag: 'Allowed, with controls', h: 'Human in the loop', t: 'Validate it like any other model, log inputs and outputs, and make sure the reviewer can explain the decision without the AI.' },
+      minimum: { tone: 'info', tag: 'Allowed', h: 'Minimum data', t: 'Inside the approved tool, with only the data the task needs, under the same handling rules as the source documents.' },
+      go: { tone: 'info', tag: 'Go ahead', h: 'Low risk', t: 'Approved tool, no customer data, no decision riding on it. Normal judgement applies: check facts before you rely on them.' }
+    };
+    const CASES = [
+      { label: 'Tax return, own chatbot', case: 'A borrower’s tax return pasted into a personal chatbot account', a: [false, false] },
+      { label: 'Credit memo draft', case: 'First draft of a credit memo in the bank’s approved assistant', a: [true, true, true] },
+      { label: 'Training quiz', case: 'A quiz on public SBA rules for team training, in the approved tool', a: [true, false, false] }
+    ];
+    let n = 0, run = 0;
+    const yn = v => (v ? 'Yes' : 'No');
+    const ask = (id, focus) => {
+      const q = Q[id], qid = 'pq-' + n;
+      const yes = h('button', { class: 'btn', type: 'button', text: 'Yes' }), no = h('button', { class: 'btn', type: 'button', text: 'No' });
+      yes.addEventListener('click', () => { run++; answer(id, true, true); }); // a click takes over from any case playing
+      no.addEventListener('click', () => { run++; answer(id, false, true); });
+      step.replaceChildren(h('div', { class: 'ask', role: 'group', 'aria-labelledby': qid },
+        h('p', { class: 'qn', 'aria-hidden': 'true', text: 'Q' + (n + 1) }),
+        h('p', { class: 'qt', id: qid, text: q.q }), h('p', { class: 'hint', text: q.hint }),
+        h('div', { class: 'answers' }, yes, no)));
+      if (focus) yes.focus();
+    };
+    const verdict = (id, focus) => {
+      const o = OUT[id], again = h('button', { class: 'pill', type: 'button', text: 'Start over' });
+      again.addEventListener('click', () => reset(true));
+      const head = h('h3', { class: 'out', tabindex: '-1', text: o.h });
+      step.replaceChildren(h('div', { class: 'verdict-card ' + o.tone },
+        h('div', { class: 'v-top' }, h('p', { class: 'stamp', text: o.tag }), again), head, h('p', { class: 'why', text: o.t })));
+      status.textContent = `Outcome: ${o.tag}. ${o.h}. ${o.t}`;
+      if (focus) head.focus();
+    };
+    const answer = (id, v, focus) => {
+      trail.append(h('li', {}, h('span', { class: 'qn', text: 'Q' + (++n) }), h('span', { class: 'qt', text: Q[id].s }), h('span', { class: 'ans ' + yn(v).toLowerCase(), text: yn(v) })));
+      const next = v ? Q[id].yes : Q[id].no;
+      (Q[next] ? ask : verdict)(next, focus);
+    };
+    const reset = (focus, label = 'Case · yours: answer the questions') => {
+      run++; n = 0; trail.replaceChildren(); status.textContent = '';
+      caseLine.textContent = label;
+      $$('button', cases).forEach(b => b.setAttribute('aria-pressed', 'false'));
+      ask('approved', focus);
+    };
+    const play = (c, btn) => {
+      reset(false, 'Case · ' + c.case);
+      btn.setAttribute('aria-pressed', 'true');
+      const me = run;
+      let id = 'approved';
+      c.a.forEach((v, i) => setTimeout(() => {
+        if (me !== run) return;
+        const q = id; id = v ? Q[q].yes : Q[q].no; answer(q, v, false);
+      }, reduceMotion ? 0 : 520 * (i + 1)));
+    };
+    CASES.forEach(c => {
+      const b = h('button', { class: 'pill', type: 'button', 'aria-pressed': 'false', 'aria-label': c.case, text: c.label });
+      b.addEventListener('click', () => play(c, b));
+      cases.append(b);
+    });
+    reset(false);
+    return { allow() {}, moves: false };
   }
 })();

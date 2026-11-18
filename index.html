@@ -71,6 +71,7 @@
         <div class="lab-tabs" role="tablist" aria-label="Demos">
           <button type="button" role="tab" id="tab-inbox" aria-controls="lab-inbox" aria-selected="true">Inbox triage</button>
           <button type="button" role="tab" id="tab-8k" aria-controls="lab-8k" aria-selected="false" tabindex="-1">8-K alerts</button>
+          <button type="button" role="tab" id="tab-policy" aria-controls="lab-policy" aria-selected="false" tabindex="-1">AI use check</button>
         </div>
         <div class="lab-panel" id="lab-inbox" role="tabpanel" aria-labelledby="tab-inbox">
           <div class="reading" aria-hidden="true"></div>
@@ -91,6 +92,14 @@
           </div>
           <ol class="feed" aria-label="Simulated 8-K alerts"></ol>
           <p class="demo-foot">Each filing is tagged by its 8-K item and given a priority with a one-line reason, the way a credit team would want it. Select an alert to see why.</p>
+        </div>
+        <div class="lab-panel" id="lab-policy" role="tabpanel" aria-labelledby="tab-policy" hidden>
+          <div class="policy">
+            <ol class="trail" aria-label="Answers so far"></ol>
+            <div class="step"></div>
+            <div class="cases" role="group" aria-label="Example cases"><span class="label" aria-hidden="true">Try a case</span></div>
+          </div>
+          <p class="demo-foot">A generic decision tree for using an AI tool on bank work: the questions to ask before the prompt, not any bank's actual policy.</p>
         </div>
       </aside>
     </section>
