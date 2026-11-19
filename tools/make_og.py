@@ -23,7 +23,7 @@ def card(d):
     fonts = (ROOT / "assets/fonts").as_uri()
     return f"""<!doctype html><meta charset="utf-8"><style>
 @font-face {{ font-family: A; src: url({fonts}/archivo-core.woff2); font-weight: 100 900; font-stretch: 62% 125%; }}
-@font-face {{ font-family: M; src: url({fonts}/plex-mono-500.woff2); }}
+@font-face {{ font-family: M; src: url({fonts}/plex-mono-500-core.woff2); }}
 * {{ margin: 0; box-sizing: border-box; }}
 html, body {{ width: 1200px; height: 630px; }}
 body {{ background: #e7e7e2; color: #16181c; font-family: A; padding: 56px 72px 52px;
