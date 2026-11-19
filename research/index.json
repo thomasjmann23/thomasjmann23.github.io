@@ -1,6 +1,21 @@
 {
   "items": [
     {
+      "id": "ai-in-sba-lending",
+      "title": "AI in SBA lending: where it is used, what the rules say, and the risks",
+      "date": "2026-11-19",
+      "status": "Complete",
+      "summary": "Where lenders, vendors and the SBA itself use AI across the 7(a) and 504 process, from intake to servicing, and how SOP 50 10 8.1, the LSP rules and the guaranty already constrain it. The public deployments cluster in loans of $350,000 or less, and every performance figure is the lender's or vendor's own.",
+      "tags": [
+        "AI in lending",
+        "SBA",
+        "Small business",
+        "Regulation",
+        "Fair lending"
+      ],
+      "file": "research/ai-in-sba-lending/index.md"
+    },
+    {
       "id": "td-credit-assist-ai-copilots",
       "title": "TD Credit Assist and the rise of AI copilots for credit analysts",
       "date": "2026-11-16",
