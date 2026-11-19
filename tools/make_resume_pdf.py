@@ -68,8 +68,10 @@ def doc(d):
     return f"""<!doctype html><html lang="en"><meta charset="utf-8"><title>{e(d["name"])}, résumé</title><style>
 @font-face {{ font-family: A; src: url({fonts}/archivo-core.woff2); font-weight: 100 900; font-stretch: 62% 125%; }}
 @font-face {{ font-family: A; src: url({fonts}/archivo-ext.woff2); font-weight: 100 900; font-stretch: 62% 125%; unicode-range: U+80-FF, U+2000-206F, U+20AC, U+2122, U+2190-21FF; }}
-@font-face {{ font-family: M; src: url({fonts}/plex-mono-400.woff2); font-weight: 400; }}
-@font-face {{ font-family: M; src: url({fonts}/plex-mono-500.woff2); font-weight: 500; }}
+@font-face {{ font-family: M; src: url({fonts}/plex-mono-400-core.woff2); font-weight: 400; }}
+@font-face {{ font-family: M; src: url({fonts}/plex-mono-400-ext.woff2); font-weight: 400; unicode-range: U+80-FF, U+2000-206F, U+20AC, U+2122, U+2190-21FF; }}
+@font-face {{ font-family: M; src: url({fonts}/plex-mono-500-core.woff2); font-weight: 500; }}
+@font-face {{ font-family: M; src: url({fonts}/plex-mono-500-ext.woff2); font-weight: 500; unicode-range: U+80-FF, U+2000-206F, U+20AC, U+2122, U+2190-21FF; }}
 @page {{ size: A4; margin: 11mm 15mm 10mm; }}
 * {{ margin: 0; padding: 0; box-sizing: border-box; }}
 body {{ font: 400 8.9pt/1.36 A; color: #16181c; font-stretch: 100%; word-spacing: .04em; }}

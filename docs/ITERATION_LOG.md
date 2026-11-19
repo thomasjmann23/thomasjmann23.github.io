@@ -2,6 +2,14 @@
 
 Newest first. One entry per run.
 
+## 2026-11-19 — IBM Plex Mono split into core + extended
+- **Category:** performance (backlog #4)
+- **What:** `tools/subset_fonts.py` now splits IBM Plex Mono 400 and 500 the same way as Archivo: `plex-mono-{400,500}-core.woff2` (ASCII + the site's few extras, plus ↑↓ for the command menu's "move" hint, about 7.8 KB each) and `plex-mono-{400,500}-ext.woff2` (rest of Latin-1, about 7.2 KB each, fetched only via `unicode-range`). Every page now loads about 15.6 KB of mono font instead of 29.6 KB. A Playwright scan of every page, project page, research article and lab tab found no mono character outside core, so today no page fetches ext. Archivo output is byte-identical to before (script re-run from the same Fontsource source). `style.css`, `fetch_fonts.sh`, `build_preview.py`, `make_resume_pdf.py` and `make_og.py` point at the new files.
+- **PR:** see the PR for daily/2026-11-19-plex-subset.
+- **Checks:** tools/check.py all pages at 1440/390: ALL CHECKS PASSED. Screenshots of work, projects, a project page, the research list and an article are pixel-identical to main (light/dark, 1440/390, reduced motion); the command menu (with its ↑↓ hint) loads only core; injecting "Café € Zürich" in mono pulls in ext. Résumé PDF and OG image regenerated with the new files render identically (committed PDF left as is). Lighthouse home (mobile): Performance 98, Accessibility 100, Best Practices 100, SEO 100.
+- **Preview:** not republished (optional).
+- **Suggested next:** motion & transitions, backlog #2 (research article titles get the word reveal), or accessibility #4.
+
 ## 2026-11-19 — Research: AI in SBA lending
 - **Category:** research (scheduled research task)
 - **What:** New study `ai-in-sba-lending` (~6,000 words, 51 sources, 4 SVG figures, 1 table): where lenders, vendors and the SBA use AI across the 7(a) and 504 process (intake, eligibility, underwriting, closing, servicing); what SOP 50 10 8 / 8.1, the SBSS sunset notices, the LSP rules (13 CFR 103), the guaranty rules (13 CFR 120.524) and SOP 50 57 4 require; wider rules (SR 26-2, third-party guidance, Reg B, Section 1071, FTC Safeguards); and risks (PPP fraud evidence from SBA OIG, access evidence, rule churn, vendor concentration). Added to the top of research/index.json; queue item checked off.

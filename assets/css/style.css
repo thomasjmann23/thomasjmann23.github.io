@@ -6,12 +6,15 @@
    for figures and labels. Square-ish geometry, paper grain, no glow.
    Light/dark follow the system; an explicit choice overrides.
    ============================================================ */
-/* Self-hosted fonts (OFL): Archivo variable (wght 100–900, wdth 62–125), IBM Plex Mono 400/500 */
+/* Self-hosted fonts (OFL): Archivo variable (wght 100–900, wdth 62–125), IBM Plex Mono 400/500;
+   each split into core (preloaded/always used) + ext (fetched only via unicode-range) by tools/subset_fonts.py */
 /* Archivo is split in two (tools/subset_fonts.py): core is preloaded, ext loads only if a page uses one of its characters. */
 @font-face { font-family: "Archivo"; src: url(../fonts/archivo-core.woff2) format("woff2-variations"), url(../fonts/archivo-core.woff2) format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; font-style: normal; font-display: swap; unicode-range: U+0020-007E, U+00A0, U+00A9, U+00B7, U+00D7, U+00E9, U+2013-2014, U+2018-2019, U+201C-201D, U+2022, U+2026, U+2212; }
 @font-face { font-family: "Archivo"; src: url(../fonts/archivo-ext.woff2) format("woff2-variations"), url(../fonts/archivo-ext.woff2) format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; font-style: normal; font-display: swap; unicode-range: U+00A1-00A8, U+00AA-00B6, U+00B8-00D6, U+00D8-00E8, U+00EA-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+201A, U+201E, U+2032-2033, U+2039-203A, U+2044, U+20AC, U+2122, U+2191, U+2193; }
-@font-face { font-family: "IBM Plex Mono"; src: url(../fonts/plex-mono-400.woff2) format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
-@font-face { font-family: "IBM Plex Mono"; src: url(../fonts/plex-mono-500.woff2) format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: "IBM Plex Mono"; src: url(../fonts/plex-mono-400-core.woff2) format("woff2"); font-weight: 400; font-style: normal; font-display: swap; unicode-range: U+0020-007E, U+00A0, U+00A9, U+00B7, U+00D7, U+00E9, U+2013-2014, U+2018-2019, U+201C-201D, U+2022, U+2026, U+2191, U+2193, U+2212; }
+@font-face { font-family: "IBM Plex Mono"; src: url(../fonts/plex-mono-400-ext.woff2) format("woff2"); font-weight: 400; font-style: normal; font-display: swap; unicode-range: U+00A1-00A8, U+00AA-00B6, U+00B8-00D6, U+00D8-00E8, U+00EA-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+201A, U+201E, U+2032-2033, U+2039-203A, U+2044, U+20AC, U+2122; }
+@font-face { font-family: "IBM Plex Mono"; src: url(../fonts/plex-mono-500-core.woff2) format("woff2"); font-weight: 500; font-style: normal; font-display: swap; unicode-range: U+0020-007E, U+00A0, U+00A9, U+00B7, U+00D7, U+00E9, U+2013-2014, U+2018-2019, U+201C-201D, U+2022, U+2026, U+2191, U+2193, U+2212; }
+@font-face { font-family: "IBM Plex Mono"; src: url(../fonts/plex-mono-500-ext.woff2) format("woff2"); font-weight: 500; font-style: normal; font-display: swap; unicode-range: U+00A1-00A8, U+00AA-00B6, U+00B8-00D6, U+00D8-00E8, U+00EA-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+201A, U+201E, U+2032-2033, U+2039-203A, U+2044, U+20AC, U+2122; }
 
 :root {
   --bg: #e7e7e2;            /* stone paper */
