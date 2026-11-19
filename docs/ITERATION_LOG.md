@@ -2,6 +2,11 @@
 
 Newest first. One entry per run.
 
+## 2026-11-19 — Research: AI in SBA lending
+- **Category:** research (scheduled research task)
+- **What:** New study `ai-in-sba-lending` (~6,000 words, 51 sources, 4 SVG figures, 1 table): where lenders, vendors and the SBA use AI across the 7(a) and 504 process (intake, eligibility, underwriting, closing, servicing); what SOP 50 10 8 / 8.1, the SBSS sunset notices, the LSP rules (13 CFR 103), the guaranty rules (13 CFR 120.524) and SOP 50 57 4 require; wider rules (SR 26-2, third-party guidance, Reg B, Section 1071, FTC Safeguards); and risks (PPP fraud evidence from SBA OIG, access evidence, rule churn, vendor concentration). Added to the top of research/index.json; queue item checked off.
+- **Checks:** see the PR for research/ai-in-sba-lending.
+
 ## 2026-11-18 — The lab: AI use check (governance decision tree)
 - **Category:** interactivity (backlog #1)
 - **What:** The home lab gets a third tab, "AI use check": a generic decision tree for using an AI tool on bank work (enterprise-approved? only public information? feeds a decision or reaches a customer? a named reviewer reads every output? uses customer data?). Each answer drops into a ruled trail with a mono Q-number and a YES/NO stamp, like conditions on a credit file; the next question rises in, and the outcome (Stop / Limited / Not yet / Allowed, with controls / Allowed / Go ahead, in the status colours) is stamped with its heading opening from condensed (62%) to wide on Archivo's width axis. Three example cases (tax return in a personal chatbot, credit memo draft in the approved assistant, training quiz) play their answers in; a click on an answer takes over from a playing case. Labelled as generic, not any bank's actual policy; no new claims about Thomas. Keyboard: answers are buttons in a group labelled by the question, focus moves to the next question's Yes and then to the outcome heading; the outcome is also announced through a status region. The Pause button hides on this tab (nothing moves on its own). Fixed min-height so walking the tree doesn't resize the panel (a few px of growth only at ~1024px on the longest outcome). Reduced motion: no rise or stamp, cases fill in instantly.
