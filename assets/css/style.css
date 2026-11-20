@@ -303,7 +303,7 @@ kbd { font: 500 11px var(--mono); padding: 1px 5px; border-radius: 3px; border: 
 
 /* ---------- Project cards (an index, not a grid of boxes) ---------- */
 .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 0 32px; }
-.card { display: grid; gap: 12px; align-content: start; padding: 24px 0 28px; border-top: 1px solid var(--line-2); text-decoration: none; color: inherit; transition: opacity .3s; }
+.card { display: grid; gap: 12px; align-content: start; padding: 24px 0 28px; border-top: 1px solid var(--line-2); text-decoration: none; color: inherit; transition: color .3s; }
 .card:hover { color: inherit; }
 .card .k { font: 500 12px var(--mono); color: var(--faint); }
 .card h3 { font-size: 30px; line-height: 1.02; font-weight: 700; font-stretch: 100%; letter-spacing: -.025em; transition: font-stretch .45s var(--ease-out), color .2s; }
@@ -312,7 +312,14 @@ kbd { font: 500 11px var(--mono); padding: 1px 5px; border-radius: 3px; border: 
 .card .go { display: flex; gap: 8px; align-items: center; font: 500 13px var(--mono); color: var(--muted); }
 .card:hover .go { color: var(--accent); }
 .card:hover .go .arrow { transform: translateX(6px); }
-.card.dim { opacity: .22; }
+/* Filtered out: not faded (that fails contrast on a live link) but set aside.
+   Text drops to the faint ink, the title condenses on the width axis, chips go dashed. */
+.card.dim, .private > div.dim { --muted: var(--faint); color: var(--faint); }
+.card.dim h3 { font-stretch: 74%; font-weight: 500; }
+.card.dim:hover h3, .card.dim:focus-visible h3 { font-stretch: 100%; }
+.private > div.dim h3 { font-stretch: 85%; font-weight: 500; }
+.dim .chip { border-style: dashed; }
+.chip.on { color: var(--accent); border-color: currentColor; }
 .flow { display: flex; flex-wrap: wrap; gap: 4px 18px; font: 12px var(--mono); color: var(--muted); }
 .flow li { position: relative; }
 .flow li + li::before { content: ""; position: absolute; left: -14px; top: .35em; width: 10px; height: 10px; background: var(--faint); -webkit-mask: var(--arrow-r) center / contain no-repeat; mask: var(--arrow-r) center / contain no-repeat; }
@@ -322,9 +329,8 @@ kbd { font: 500 11px var(--mono); padding: 1px 5px; border-radius: 3px; border: 
 .filters .pill[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 .filter-status { min-height: 1.6em; margin-bottom: 18px; font: 13px var(--mono); color: var(--muted); }
 .private { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 0 32px; }
-.private > div { padding: 20px 0; border-top: 1px dashed var(--line-2); transition: opacity .3s; }
-.private > div.dim { opacity: .22; }
-.private h3 { font-size: 17px; margin-bottom: 6px; }
+.private > div { padding: 20px 0; border-top: 1px dashed var(--line-2); transition: color .3s; }
+.private h3 { font-size: 17px; margin-bottom: 6px; transition: font-stretch .45s var(--ease-out); }
 .private p { font-size: 14.5px; color: var(--muted); margin-bottom: 12px; }
 .sub-head { display: flex; gap: 14px; align-items: baseline; flex-wrap: wrap; margin: 72px 0 8px; }
 .sub-head h2 { font-size: 28px; font-stretch: 112%; }
@@ -549,4 +555,5 @@ kbd { font: 500 11px var(--mono); padding: 1px 5px; border-radius: 3px; border: 
   .palette li[aria-selected="true"] small { color: HighlightText; opacity: 1; }
   .lab-tabs [role="tab"][aria-selected="true"] { text-decoration: underline 2px; text-underline-offset: 6px; }
   .palette input:focus-visible { outline: 2px solid Highlight; outline-offset: -2px; }
+  .chip.on { border-color: Highlight; color: Highlight; }
 }
