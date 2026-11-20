@@ -326,13 +326,33 @@
     const btns = ['All', ...skills].map(s => h('button', { class: 'pill', type: 'button', 'aria-pressed': String(s === 'All'), text: s }));
     const bar = $('[data-render="filters"]'), status = $('.filter-status');
     bar.replaceChildren(...btns);
+    // Each item carries a hidden note, read first, so a screen reader hears that a dimmed item doesn't match.
+    all.forEach(c => c.prepend(h('span', { class: 'sr-only match-note' })));
+    const groups = [cards, priv].map(list => ({ box: list[0].parentElement, list }));
+    // Matches move to the front of their list (so tab order follows), the rest slide in behind.
+    // FLIP on the independent `translate` property, so it doesn't fight the scroll-reveal transform.
+    const reorder = hitOf => {
+      const before = new Map(all.map(c => [c, c.getBoundingClientRect()]));
+      groups.forEach(({ box, list }) => box.append(...list.filter(hitOf), ...list.filter(c => !hitOf(c))));
+      if (reduceMotion) return;
+      all.forEach(c => {
+        const a = before.get(c), b = c.getBoundingClientRect(), dx = a.left - b.left, dy = a.top - b.top;
+        if (dx || dy) c.animate([{ translate: `${dx}px ${dy}px` }, { translate: '0 0' }], { duration: 520, easing: 'cubic-bezier(.2,.8,.2,1)' });
+      });
+    };
     const apply = s => {
       btns.forEach(b => b.setAttribute('aria-pressed', String(b.textContent === s)));
-      let n = 0;
-      all.forEach(c => { const hit = s === 'All' || c.dataset.skills.split('|').includes(s); c.classList.toggle('dim', !hit); if (hit) n++; });
-      const jobs = d.experience.filter(j => j.skills.includes(s)).map(j => j.org);
+      const hits = new Set(all.filter(c => s === 'All' || c.dataset.skills.split('|').includes(s)));
+      all.forEach(c => {
+        const hit = hits.has(c);
+        c.classList.toggle('dim', !hit);
+        c.querySelector('.match-note').textContent = hit ? '' : `Doesn't use ${s}: `;
+        c.querySelectorAll('.chip').forEach(x => x.classList.toggle('on', x.textContent === s));
+      });
+      reorder(c => hits.has(c));
+      const n = hits.size, jobs = d.experience.filter(j => j.skills.includes(s)).map(j => j.org);
       // Always say something, so screen readers hear the result of every press (including "All").
-      status.textContent = s === 'All' ? `All skills · ${n} projects` : `${s} · ${n} project${n === 1 ? '' : 's'}` + (jobs.length ? ` · used at ${jobs.join(', ')}` : '');
+      status.textContent = s === 'All' ? `All skills · ${n} projects` : `${s} · ${n} of ${all.length} projects, shown first` + (jobs.length ? ` · used at ${jobs.join(', ')}` : '');
     };
     bar.addEventListener('click', e => {
       const b = e.target.closest('button'); if (!b) return;

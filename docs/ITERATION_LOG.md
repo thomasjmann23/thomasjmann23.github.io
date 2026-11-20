@@ -2,6 +2,14 @@
 
 Newest first. One entry per run.
 
+## 2026-11-20 — Skill filter: matches first, set-aside instead of faded
+- **Category:** accessibility (backlog #4)
+- **What:** On Projects, picking a skill used to fade non-matching projects to 22% opacity: screen readers read them as normal, and the faded text (still live links) failed contrast (axe: 54 colour-contrast failures per theme/width with a filter on). Now: (1) matching projects move to the front of each list (featured and "At the bank"), so tab order and reading order follow; they slide into place with a FLIP on the independent `translate` property (doesn't fight the scroll-reveal transform), instant under reduced motion. (2) Non-matches are "set aside" rather than faded: text drops to the faint ink, the title condenses on Archivo's width axis (74%, weight 500; opens back to 100% on hover/focus) and their chips go dashed, all within AA. (3) Each item starts with a visually hidden note, so a filtered-out link reads "Doesn't use LLM integration: SBA FOIA Analyzer…". (4) The matching skill chip is inked cobalt in each match (Highlight in forced colours). (5) The status line now says "LLM integration · 5 of 11 projects, shown first · used at …". "All" restores the original order.
+- **PR:** see the PR for daily/2026-11-20-filter-a11y.
+- **Checks:** tools/check.py all pages at 1440/390: ALL CHECKS PASSED. axe-core 4.10 on Projects with a filter on, light/dark, 1440/390: 0 violations (was 54 contrast failures each). axe on all five research articles (light/dark, 1440): 0 violations. `?skill=OCR` deep link: CLS 0, no console errors. Keyboard: pills operable with Enter/Space, focus stays on the pill. Reduced motion: no slide. Screenshots of the filtered state reviewed (light 1440, dark 390). Lighthouse not re-run (no loading or asset changes).
+- **Preview:** not republished (optional).
+- **Suggested next:** motion & transitions, backlog #2 (research article titles get the word reveal), or interactivity #4 (command menu entry for the AI use check).
+
 ## 2026-11-19 — IBM Plex Mono split into core + extended
 - **Category:** performance (backlog #4)
 - **What:** `tools/subset_fonts.py` now splits IBM Plex Mono 400 and 500 the same way as Archivo: `plex-mono-{400,500}-core.woff2` (ASCII + the site's few extras, plus ↑↓ for the command menu's "move" hint, about 7.8 KB each) and `plex-mono-{400,500}-ext.woff2` (rest of Latin-1, about 7.2 KB each, fetched only via `unicode-range`). Every page now loads about 15.6 KB of mono font instead of 29.6 KB. A Playwright scan of every page, project page, research article and lab tab found no mono character outside core, so today no page fetches ext. Archivo output is byte-identical to before (script re-run from the same Fontsource source). `style.css`, `fetch_fonts.sh`, `build_preview.py`, `make_resume_pdf.py` and `make_og.py` point at the new files.
