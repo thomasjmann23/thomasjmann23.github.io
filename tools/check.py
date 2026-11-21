@@ -4,7 +4,7 @@
 
 With no URL it serves the repo locally. For each page and width (1440, 390):
 console errors, layout shift, horizontal overflow, alt text, named controls,
-one h1, no skipped heading levels, rendered content, page weight. Also: light + reduced-motion pass,
+one h1, no skipped heading levels, rendered content (incl. the newest research article), page weight. Also: light + reduced-motion pass,
 command menu opens with Ctrl+K and navigates, theme toggle works,
 résumé PDF is current (tools/resume_pdf.stamp) and its download link works.
 Screenshots go to tools/shots/. Exits 1 if anything fails.
@@ -29,12 +29,15 @@ MAX_BYTES = 1_000_000
 def pages():
     data = json.loads((ROOT / "content/resume.json").read_text())
     first = data["projects"][0]["id"]
+    studies = json.loads((ROOT / "research/index.json").read_text()).get("items", [])
+    article = {"article": (f"research.html?id={studies[0]['id']}", ".prose h2")} if studies else {}
     return {
         "home": ("index.html", ".cards .card"),
         "work": ("work.html", ".job"),
         "projects": ("projects.html", ".cards .card"),
         "project": (f"project.html?id={first}", ".pipeline li"),
         "research": ("research.html", ".page-head h1"),
+        **article,
     }
 
 

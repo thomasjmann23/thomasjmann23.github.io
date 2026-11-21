@@ -127,10 +127,15 @@
       t.replaceChildren(h('span', { class: 'sr-only', text }), h('span', { class: 'tw', 'aria-hidden': 'true' }, ...words(t)));
     });
   }
+  // Research article titles morph out of their card when opened from the
+  // research list (view-transition-name r-<id>); that morph is their entrance,
+  // so the word reveal only runs when the article is reached any other way.
+  const fromUrl = () => (window.navigation && navigation.activation && navigation.activation.from && navigation.activation.from.url) || document.referrer;
+  const isResearchList = u => { const x = urlOf(u); return !!x && x.origin === location.origin && /\/research\.html$/.test(x.pathname) && !x.searchParams.get('id'); };
   function revealTitles() {
     const go = () => $$('.page-title[data-split]').forEach(t => {
       const ws = $$('.w', t);
-      if (!ws.length) return;
+      if (!ws.length || (t.dataset.morph && isResearchList(fromUrl()))) return;
       const r = ws.map(w => w.getBoundingClientRect().width);
       ws.forEach((w, k) => { w.style.width = r[k] + 'px'; });
       t.classList.add('title-go');
@@ -512,7 +517,7 @@
       h('header', { class: 'detail-hero' },
         h('a', { class: 'back enter', href: 'research.html' }, arrow('←'), 'All research'),
         h('p', { class: 'note enter', text: [item.date, item.status].filter(Boolean).join(' · ') }),
-        h('h1', { text: item.title, style: `view-transition-name: r-${item.id}` }),
+        h('h1', { class: 'page-title', 'data-morph': 'r', text: item.title, style: `view-transition-name: r-${item.id}` }),
         item.summary ? h('p', { class: 'tag alt enter', style: '--d:1', text: item.summary }) : null),
       h('div', { class: 'prose enter', style: '--d:2', text: 'Loading…' })));
     const prose = $('.prose', host);

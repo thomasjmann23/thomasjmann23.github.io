@@ -5,8 +5,8 @@ Pick from the top unless yesterday's log suggests something better. Rotate categ
 ## Up next
 1. **Content:** each project detail page could show "What I'd do next" or "What it taught me", only from what the repo shows.
 2. **Project showcases:** a similar replay for another project (e.g. the SBA FOIA analyzer), only if its repo supports the steps shown.
-3. **Motion:** research article titles could get the same word reveal (they carry their own `r-<id>` morph from the list, so it needs care).
-4. **Interactivity:** command menu entry "AI use check" that opens the home lab on that tab (e.g. `index.html#lab-policy`).
+3. **Interactivity:** command menu entry "AI use check" that opens the home lab on that tab (e.g. `index.html#lab-policy`).
+4. **Performance:** research articles shift the footer by ~0.04 CLS on phones when the markdown arrives ("Loading…" is short); give the prose a min-height or keep the footer below the fold until it loads.
 5. **Design polish:** the full-page grain background shows a seam in tall full-page screenshots (likely a fixed-size layer); check whether it's visible in real scrolling.
 
 ## Questions for Thomas
