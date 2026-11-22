@@ -1,6 +1,21 @@
 {
   "items": [
     {
+      "id": "small-business-borrower-information-ai",
+      "title": "What AI tells small-business borrowers: loan information, pricing and fair lending",
+      "date": "2026-11-22",
+      "status": "Complete",
+      "summary": "How chatbots, marketplaces, accounting platforms and lenders' own assistants change what small-business owners can learn about loan options, prices and eligibility, and why fair-lending and disclosure rules reach only some of them. Usage figures and product claims are mostly self-reported, and the public data that could measure outcomes is being cut back.",
+      "tags": [
+        "AI in lending",
+        "Small business",
+        "Fair lending",
+        "Disclosure",
+        "Regulation"
+      ],
+      "file": "research/small-business-borrower-information-ai/index.md"
+    },
+    {
       "id": "ai-in-sba-lending",
       "title": "AI in SBA lending: where it is used, what the rules say, and the risks",
       "date": "2026-11-19",

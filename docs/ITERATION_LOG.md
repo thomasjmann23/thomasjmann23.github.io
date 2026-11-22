@@ -2,6 +2,11 @@
 
 Newest first. One entry per run.
 
+## 2026-11-22 — Research: AI and small-business borrower information
+- **Category:** research (scheduled research task)
+- **What:** New study `small-business-borrower-information-ai` (~6,100 words, 37 sources, 4 SVG figures, 2 tables): what general chatbots, marketplaces (Lendio, Nav), accounting-platform AI (QuickBooks Capital in ChatGPT and Claude), lenders' own assistants and SBA Lender Match let small-business owners learn about loan options, pricing and eligibility; the Fed's evidence on cost surprises (2025 SBCS) and opaque online-lender disclosures (2019); the 2026 Regulation B changes (effects test removed, discouragement limited to statements) and revised Section 1071 (no pricing data, 2028); state commercial financing disclosure laws (APR only in California); and model accuracy and bias studies. Added to the top of research/index.json; queue item checked off (queue now empty).
+- **Checks:** see the PR for research/small-business-borrower-information-ai.
+
 ## 2026-11-21 — Research article titles set word by word
 - **Category:** motion & transitions (backlog #3)
 - **What:** Research article titles now get the same entrance as the page titles: each word rises out of a clipped line and opens from condensed (62%) to full width on Archivo's width axis, with width locks so nothing reflows and an `.sr-only` copy for screen readers. The article h1 keeps its `r-<id>` name, so when you open a study from the Research list the card title still morphs into the header and the word reveal is skipped (the morph is the entrance; checked with `navigation.activation.from`, falling back to `document.referrer`, and evaluated at reveal time so prerendered pages decide on activation). Reached any other way (direct link, command menu, another page) the words set in. Reduced motion: no split. `tools/check.py` now also checks the newest research article at 1440/390.
