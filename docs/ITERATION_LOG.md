@@ -2,6 +2,14 @@
 
 Newest first. One entry per run.
 
+## 2026-11-22 — Deep links and command-menu entries for the lab
+- **Category:** interactivity (backlog #3)
+- **What:** Each lab tab now has a deep link: `index.html#lab-inbox`, `#lab-8k`, `#lab-policy`. Opening one selects that tab before the page is revealed (no flash of the default tab) and scrolls the lab into view only as far as needed (`block: 'nearest'`, so on desktop nothing moves). Picking a tab by click or arrow keys updates the address with `replaceState`, so a shared link opens the same demo; with no hash, Inbox triage stays the default. The command menu gets three entries ("The lab: Inbox triage / 8-K alerts / AI use check", tagged "demo", searchable by e.g. "governance", "sec", "triage"): on the home page they switch the tab in place, scroll smoothly (instant under reduced motion) and move focus to the tab, which the menu no longer pulls back to its opener; on other pages they navigate to the deep link. Unknown hashes are ignored.
+- **PR:** see the PR for daily/2026-11-22-lab-deep-links.
+- **Checks:** tools/check.py all pages at 1440/390: ALL CHECKS PASSED (home CLS 0.001 / 0.003). Extra Playwright pass at 1440/390, with and without reduced motion: `index.html#lab-policy` opens on AI use check with the lab in view; ⌘K "8-K alerts" from Work lands on `index.html#lab-8k` with that tab open; ⌘K "ai use check" on home switches the tab, focus lands on the tab (Pause hidden as before), ArrowLeft moves to 8-K and updates the hash; no console errors. Phone screenshot of the deep link reviewed. Lighthouse not re-run (no loading or asset changes).
+- **Preview:** not republished (optional).
+- **Suggested next:** performance, backlog #3 (reserve space for the research article body so the footer doesn't shift on phones), or content #1.
+
 ## 2026-11-22 — Research: AI and small-business borrower information
 - **Category:** research (scheduled research task)
 - **What:** New study `small-business-borrower-information-ai` (~6,100 words, 37 sources, 4 SVG figures, 2 tables): what general chatbots, marketplaces (Lendio, Nav), accounting-platform AI (QuickBooks Capital in ChatGPT and Claude), lenders' own assistants and SBA Lender Match let small-business owners learn about loan options, pricing and eligibility; the Fed's evidence on cost surprises (2025 SBCS) and opaque online-lender disclosures (2019); the 2026 Regulation B changes (effects test removed, discouragement limited to statements) and revised Section 1071 (no pricing data, 2028); state commercial financing disclosure laws (APR only in California); and model accuracy and bias studies. Added to the top of research/index.json; queue item checked off (queue now empty).
