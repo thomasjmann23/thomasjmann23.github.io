@@ -5,9 +5,8 @@ Pick from the top unless yesterday's log suggests something better. Rotate categ
 ## Up next
 1. **Content:** each project detail page could show "What I'd do next" or "What it taught me", only from what the repo shows.
 2. **Project showcases:** a similar replay for another project (e.g. the SBA FOIA analyzer), only if its repo supports the steps shown.
-3. **Interactivity:** command menu entry "AI use check" that opens the home lab on that tab (e.g. `index.html#lab-policy`).
-4. **Performance:** research articles shift the footer by ~0.04 CLS on phones when the markdown arrives ("Loading…" is short); give the prose a min-height or keep the footer below the fold until it loads.
-5. **Design polish:** the full-page grain background shows a seam in tall full-page screenshots (likely a fixed-size layer); check whether it's visible in real scrolling.
+3. **Performance:** research articles shift the footer by ~0.04 CLS on phones when the markdown arrives ("Loading…" is short); give the prose a min-height or keep the footer below the fold until it loads.
+4. **Design polish:** the full-page grain background shows a seam in tall full-page screenshots (likely a fixed-size layer); check whether it's visible in real scrolling.
 
 ## Questions for Thomas
 - The site now offers a one-page PDF résumé built from the site's data. Happy with it as your public CV, or would you rather it link to a version you maintain?

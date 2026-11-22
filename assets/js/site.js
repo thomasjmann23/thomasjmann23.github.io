@@ -99,7 +99,7 @@
     .finally(() => {
       // Reveal once the webfont is ready too (max 1.2s), so the type doesn't jump
       const fonts = document.fonts ? document.fonts.ready : Promise.resolve();
-      Promise.race([fonts, new Promise(r => setTimeout(r, 1200))]).then(() => { root.classList.remove('loading'); revealTitles(); });
+      Promise.race([fonts, new Promise(r => setTimeout(r, 1200))]).then(() => { root.classList.remove('loading'); revealTitles(); labJump?.(location.hash.slice(1), { scroll: true }); });
     });
 
   /* ---------------- Page-title reveal ----------------
@@ -529,6 +529,9 @@
   const loadScript = src => new Promise((ok, fail) => { const s = h('script', { src, defer: '' }); s.onload = ok; s.onerror = fail; document.head.append(s); });
 
   /* ---------------- Command palette (⌘K) ---------------- */
+  // The lab's demos have deep links (index.html#lab-policy …). On the home page the
+  // command switches the tab in place; elsewhere it navigates there.
+  const LAB = [['lab-inbox', 'Inbox triage', 'email llm triage'], ['lab-8k', '8-K alerts', 'sec filings feed'], ['lab-policy', 'AI use check', 'governance policy decision tree']];
   function setupPalette(d) {
     const dlg = $('.palette'); if (!dlg) return;
     const input = $('input', dlg), list = $('ul', dlg), empty = $('.palette-empty', dlg), status = $('.palette-status', dlg);
@@ -541,6 +544,8 @@
       { t: 'Research', s: 'page', run: go('research.html') },
       ...d.projects.map(p => ({ t: p.name, s: 'project', k: p.tagline + ' ' + p.skills.join(' '), run: go(projectUrl(p.id)) })),
       ...d.research.map(r => ({ t: r.title, s: 'research', run: go(`research.html?id=${encodeURIComponent(r.id)}`) })),
+      ...LAB.map(([id, name, k]) => ({ t: 'The lab: ' + name, s: 'demo', k: k + ' lab demo', owns: !!labJump,
+        run: labJump ? () => labJump(id, { scroll: true, focus: true, url: true }) : go('index.html#' + id) })),
       { t: 'Email Thomas', s: 'action', run: () => { location.href = 'mailto:' + d.contact.email; } },
       { t: 'Copy email address', s: 'action', run: () => copyEmail(d.contact.email) },
       { t: 'Open LinkedIn', s: 'action', run: () => window.open(d.contact.linkedin, '_blank', 'noopener') },
@@ -551,7 +556,7 @@
     const draw = () => {
       list.replaceChildren(...shown.map((c, i) => {
         const li = h('li', { role: 'option', id: 'cmd-' + i, 'aria-selected': String(i === sel) }, h('span', { text: c.t }), h('small', { text: c.s }));
-        li.addEventListener('click', () => { dlg.close(); c.run(); });
+        li.addEventListener('click', () => runCmd(c));
         li.addEventListener('pointermove', () => { if (sel !== i) { sel = i; mark(); } });
         return li;
       }));
@@ -574,6 +579,8 @@
       shown = !q ? cmds : cmds.filter(c => (c.t + ' ' + c.s + ' ' + (c.k || '')).toLowerCase().includes(q));
       sel = 0; draw();
     };
+    // A command that moves focus itself (the lab tabs) keeps it: don't hand it back to the opener.
+    const runCmd = c => { if (c.owns) opener = null; dlg.close(); c.run(); };
     const open = () => { if (dlg.open) return; opener = document.activeElement; input.value = ''; status.textContent = ''; filter(); dlg.showModal(); input.focus(); };
     // Hand focus back to whatever opened the menu (unless a command navigated away).
     dlg.addEventListener('close', () => { clearTimeout(announce); if (opener && opener.isConnected && document.activeElement !== opener) opener.focus({ preventScroll: true }); opener = null; });
@@ -584,7 +591,7 @@
       // Home/End move the caret while there is text to edit; they pick the first/last command otherwise.
       const caretKey = (e.key === 'Home' || e.key === 'End') && input.value && !e.ctrlKey;
       if (to != null && n && !caretKey) { sel = to; mark(); e.preventDefault(); }
-      else if (e.key === 'Enter' && shown[sel]) { e.preventDefault(); dlg.close(); shown[sel].run(); }
+      else if (e.key === 'Enter' && shown[sel]) { e.preventDefault(); runCmd(shown[sel]); }
     });
     dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
     $$('.palette-open').forEach(b => b.addEventListener('click', open));
@@ -597,7 +604,10 @@
   /* ---------------- The lab: three demos behind tabs (synthetic data) ----------------
      One Pause button and one visibility check drive whichever tab is open;
      the hidden demo never runs. Each demo also holds still while the pointer
-     or focus is inside it, so nothing moves under the reader. */
+     or focus is inside it, so nothing moves under the reader.
+     Each tab has a deep link (#lab-inbox, #lab-8k, #lab-policy): a link or
+     the command menu opens that tab; picking a tab updates the address. */
+  let labJump = null;
   function lab() {
     const box = $('.demo'); if (!box) return;
     const pauseBtn = $('.demo-pause');
@@ -606,7 +616,7 @@
     let paused = false, visible = true, active = 'lab-inbox'; // inbox first until the 8-K feed uses real data
     const sync = () => Object.entries(demos).forEach(([id, d]) => d.allow(!paused && visible && !document.hidden && id === active));
     const setPaused = v => { paused = v; box.classList.toggle('paused', v); pauseBtn.textContent = v ? 'Play' : 'Pause'; pauseBtn.setAttribute('aria-pressed', String(v)); sync(); };
-    const select = (tab, focus) => {
+    const select = (tab, focus, url) => {
       tabs.forEach(t => {
         const on = t === tab;
         t.setAttribute('aria-selected', String(on)); t.tabIndex = on ? 0 : -1;
@@ -615,20 +625,32 @@
       active = tab.getAttribute('aria-controls');
       pauseBtn.hidden = !demos[active].moves; // the decision tree never moves on its own
       if (focus) tab.focus();
+      if (url && location.hash !== '#' + active) history.replaceState(history.state, '', '#' + active);
       sync();
     };
+    // Open a tab by its panel id; scroll the lab into view only as far as needed.
+    labJump = (id, { scroll, focus, url } = {}) => {
+      const tab = tabs.find(t => t.getAttribute('aria-controls') === id);
+      if (!tab) return;
+      select(tab, false, url);
+      if (scroll) box.scrollIntoView({ block: 'nearest', behavior: reduceMotion || !focus ? 'instant' : 'smooth' });
+      if (focus) tab.focus({ preventScroll: true });
+    };
+    const fromHash = () => labJump(location.hash.slice(1));
+    window.addEventListener('hashchange', () => labJump(location.hash.slice(1), { scroll: true }));
     tabs.forEach((t, i) => {
-      t.addEventListener('click', () => select(t));
+      t.addEventListener('click', () => select(t, false, true));
       t.addEventListener('keydown', e => {
         const n = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 }[e.key];
         if (n == null) return;
-        e.preventDefault(); select(tabs[(n + tabs.length) % tabs.length], true);
+        e.preventDefault(); select(tabs[(n + tabs.length) % tabs.length], true, true);
       });
     });
     pauseBtn.addEventListener('click', () => setPaused(!paused));
     if ('IntersectionObserver' in window) new IntersectionObserver(([en]) => { visible = en.isIntersecting; sync(); }).observe(box);
     document.addEventListener('visibilitychange', sync);
     setPaused(reduceMotion);
+    fromHash(); // before the page is revealed, so the right tab is the first one seen
   }
 
   // Shared timer logic: runs only when the lab allows it and nobody is reading.
