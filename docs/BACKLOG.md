@@ -6,7 +6,6 @@ Pick from the top unless yesterday's log suggests something better. Rotate categ
 1. **Content:** each project detail page could show "What I'd do next" or "What it taught me", only from what the repo shows.
 2. **Project showcases:** a similar replay for another project (e.g. the SBA FOIA analyzer), only if its repo supports the steps shown.
 3. **Design polish:** the full-page grain background shows a seam in tall full-page screenshots (likely a fixed-size layer); check whether it's visible in real scrolling.
-
 4. **Performance:** research article SVG figures have no width/height in the Markdown; they haven't shifted in tests (they load ahead of the reader), but on a very slow connection they could. If it shows up, set dimensions from each SVG's viewBox after render.
 
 ## Questions for Thomas
