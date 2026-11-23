@@ -2,6 +2,14 @@
 
 Newest first. One entry per run.
 
+## 2026-11-23 — Research articles: no footer jump, body sooner
+- **Category:** performance (backlog #3)
+- **What:** While a research article's Markdown loads, the body (`.prose[aria-busy="true"]`) now reserves a full screen of height (`100svh`), so the footer stays below the fold and nothing visible moves when the text lands; `aria-busy` is removed once it renders (or fails). The "Loading…" placeholder is a quiet mono line. marked and DOMPurify (cdnjs) now start downloading as soon as `site.js` runs on an article URL, in parallel with resume.json and research/index.json, instead of only after both had arrived. A missing article file (non-2xx) now shows "Could not load this article." instead of rendering the 404 page as Markdown.
+- **PR:** see the PR for daily/2026-11-23-article-cls.
+- **Checks:** tools/check.py all pages at 1440/390: ALL CHECKS PASSED (article CLS 0.000 at both widths). Extra Playwright pass on all six articles at 390/1440, with and without 300 ms added latency on the Markdown and CDN scripts, and a step-scroll with delayed SVG figures: CLS 0 everywhere (was 0.014–0.042 on four articles on phones, all from the footer). With 300 ms latency on the JSON and CDN requests, time to article body on a phone: median 2029 ms → 1599 ms. Loading and failure states screenshotted (footer 1551 px down on an 844 px screen). Lighthouse (mobile) on an article: Performance 97 (was 96), Accessibility 100, Best Practices 100, SEO 100.
+- **Preview:** not republished (optional).
+- **Suggested next:** design polish, backlog #3 (grain seam in tall screenshots), or content #1.
+
 ## 2026-11-22 — Deep links and command-menu entries for the lab
 - **Category:** interactivity (backlog #3)
 - **What:** Each lab tab now has a deep link: `index.html#lab-inbox`, `#lab-8k`, `#lab-policy`. Opening one selects that tab before the page is revealed (no flash of the default tab) and scrolls the lab into view only as far as needed (`block: 'nearest'`, so on desktop nothing moves). Picking a tab by click or arrow keys updates the address with `replaceState`, so a shared link opens the same demo; with no hash, Inbox triage stays the default. The command menu gets three entries ("The lab: Inbox triage / 8-K alerts / AI use check", tagged "demo", searchable by e.g. "governance", "sec", "triage"): on the home page they switch the tab in place, scroll smoothly (instant under reduced motion) and move focus to the tab, which the menu no longer pulls back to its opener; on other pages they navigate to the deep link. Unknown hashes are ignored.

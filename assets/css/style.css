@@ -472,6 +472,8 @@ kbd { font: 500 11px var(--mono); padding: 1px 5px; border-radius: 3px; border: 
 .prose table { display: block; overflow-x: auto; border-collapse: collapse; margin: 0 0 18px; font-size: 15px; font-variant-numeric: tabular-nums; }
 .prose th, .prose td { text-align: left; padding: 8px 12px 8px 0; border-bottom: 1px solid var(--line); }
 .prose img { max-width: 100%; height: auto; }
+.prose[aria-busy="true"] { min-height: 100vh; min-height: 100svh; }
+.prose-wait { font: 12.5px var(--mono); letter-spacing: .04em; color: var(--faint) !important; }
 
 /* ---------- Contact / footer ---------- */
 .contact { padding: 56px 0 0; border-top: 1px solid var(--ink); display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); gap: 48px; align-items: end; }

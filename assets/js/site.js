@@ -26,6 +26,7 @@
   // Arrows are drawn, not typed: → ← ↗ aren't in the Archivo/Plex subsets and fell back to a system face
   const ARROWS = { '→': 'M2 8h11M9 4l4 4-4 4', '←': 'M14 8H3M7 4 3 8l4 4', '↗': 'M4 12 12 4M6 4h6v6' };
   const arrow = (c = '→') => { const s = h('span', { class: 'arrow', 'aria-hidden': 'true' }); s.innerHTML = `<svg viewBox="0 0 16 16" focusable="false"><path d="${ARROWS[c]}"/></svg>`; return s; };
+  const loadScript = src => new Promise((ok, fail) => { const s = h('script', { src, defer: '' }); s.onload = ok; s.onerror = fail; document.head.append(s); });
   const projectUrl = id => `project.html?id=${encodeURIComponent(id)}`;
 
   /* ---------------- Card ⇄ detail morph ----------------
@@ -86,6 +87,11 @@
   /* ---------------- Data ---------------- */
   const getJSON = url => fetch(url).then(r => { if (!r.ok) throw new Error(url + ' ' + r.status); return r.json(); });
   // research/index.json is always loaded: the command menu lists research items on every page
+  // An article needs marked + DOMPurify: start fetching them now, alongside the JSON, not after it
+  const MD_LIBS = ['https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js', 'https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js'];
+  let mdLibs = null;
+  const loadMdLibs = () => (mdLibs ||= Promise.all(MD_LIBS.map(loadScript)));
+  if (page === 'research' && params.get('id')) loadMdLibs().catch(() => {});
   Promise.all([getJSON('content/resume.json'), getJSON('research/index.json').catch(() => ({ items: [] }))])
     .then(([d, research]) => {
       d.research = (research && research.items) || [];
@@ -519,14 +525,15 @@
         h('p', { class: 'note enter', text: [item.date, item.status].filter(Boolean).join(' · ') }),
         h('h1', { class: 'page-title', 'data-morph': 'r', text: item.title, style: `view-transition-name: r-${item.id}` }),
         item.summary ? h('p', { class: 'tag alt enter', style: '--d:1', text: item.summary }) : null),
-      h('div', { class: 'prose enter', style: '--d:2', text: 'Loading…' })));
+      // aria-busy reserves a screen of height (CSS) so the footer stays below the fold until the body lands
+      h('div', { class: 'prose enter', style: '--d:2', 'aria-busy': 'true' }, h('p', { class: 'prose-wait', text: 'Loading…' }))));
     const prose = $('.prose', host);
     try {
-      const [md] = await Promise.all([fetch(item.file).then(r => r.text()), loadScript('https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js'), loadScript('https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js')]);
+      const [md] = await Promise.all([fetch(item.file).then(r => { if (!r.ok) throw new Error(item.file + ' ' + r.status); return r.text(); }), loadMdLibs()]);
       prose.innerHTML = window.DOMPurify.sanitize(window.marked.parse(md));
     } catch (e) { prose.textContent = 'Could not load this article.'; console.warn(e); }
+    prose.removeAttribute('aria-busy');
   }
-  const loadScript = src => new Promise((ok, fail) => { const s = h('script', { src, defer: '' }); s.onload = ok; s.onerror = fail; document.head.append(s); });
 
   /* ---------------- Command palette (⌘K) ---------------- */
   // The lab's demos have deep links (index.html#lab-policy …). On the home page the
