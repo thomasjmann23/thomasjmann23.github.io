@@ -476,11 +476,12 @@ kbd { font: 500 11px var(--mono); padding: 1px 5px; border-radius: 3px; border: 
 .prose-wait { font: 12.5px var(--mono); letter-spacing: .04em; color: var(--faint) !important; }
 
 /* ---------- Contact / footer ---------- */
-.contact { padding: 56px 0 0; border-top: 1px solid var(--ink); display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); gap: 48px; align-items: end; }
+.contact { padding: 56px 0 0; border-top: 1px solid var(--ink); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; align-items: end; }
+.contact > div { position: relative; }
 .contact h2 { font-size: clamp(40px, 6.4vw, 92px); line-height: .9; font-weight: 750; font-stretch: 125%; letter-spacing: -.045em; }
 .contact p { color: var(--muted); margin-bottom: 24px; font-size: 17px; }
 .contact .email { font: 500 16px var(--mono); display: block; margin-bottom: 20px; color: var(--ink); user-select: all; }
-.copy-status { min-height: 1.6em; margin-top: 12px; font: 13px var(--mono); color: var(--accent); }
+.contact .copy-status { position: absolute; top: 100%; left: 0; margin: 12px 0 0; font: 13px var(--mono); color: var(--accent); }
 .footer { margin-top: 96px; padding: 24px 0 48px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font: 12.5px var(--mono); color: var(--faint); }
 
 /* ---------- Command palette ---------- */

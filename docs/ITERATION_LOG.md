@@ -2,6 +2,15 @@
 
 Newest first. One entry per run.
 
+## 2026-11-24 — Contact block: one button row, heading on the baseline
+- **Category:** design polish (backlog #3, then a polish fix)
+- **Grain seam (backlog #3):** checked in real scrolling with Playwright at 390 and 1440 on the longest article (top, middle, bottom): the fixed grain covers every viewport evenly. The seam only appears in `full_page` screenshots, which paint fixed layers once over the first viewport. Not visible to visitors; closed with no change.
+- **What:** The home "Let's talk." block was unbalanced on desktop: the right column (0.8fr) was too narrow for the four buttons, so "Résumé" wrapped onto a second row, and the empty copy-status line reserved space under it, so the heading (bottom-aligned) floated well below the buttons. Now the two columns are equal, all four buttons sit on one row at 1100 px and up, and the copy confirmation is positioned just under the buttons without reserving space, so the bottom of "Let's talk." lines up with the button row. Also fixed a specificity bug: `.contact p` was overriding the confirmation's 13 px mono size with 17 px. Phone layout unchanged apart from the status line.
+- **PR:** see the PR for daily/2026-11-24-contact-layout.
+- **Checks:** tools/check.py all pages at 1440/390: ALL CHECKS PASSED (home CLS 0.001/0.002). Contact block screenshotted at 1440 light, 1100 dark and 390 light after clicking Copy email: buttons on one row (desktop), confirmation 13 px mono under the buttons, nothing overlapping. No new controls (keyboard unchanged); colours unchanged (contrast unchanged). Lighthouse not re-run (CSS-only layout change).
+- **Preview:** not republished (optional).
+- **Suggested next:** content & story or project showcases (backlog #1/#2 need repo access beyond this site's repo, so may need Thomas), otherwise performance #4 or a new motion idea: "Let's talk." opening on the width axis as it scrolls in.
+
 ## 2026-11-23 — Research articles: no footer jump, body sooner
 - **Category:** performance (backlog #3)
 - **What:** While a research article's Markdown loads, the body (`.prose[aria-busy="true"]`) now reserves a full screen of height (`100svh`), so the footer stays below the fold and nothing visible moves when the text lands; `aria-busy` is removed once it renders (or fails). The "Loading…" placeholder is a quiet mono line. marked and DOMPurify (cdnjs) now start downloading as soon as `site.js` runs on an article URL, in parallel with resume.json and research/index.json, instead of only after both had arrived. A missing article file (non-2xx) now shows "Could not load this article." instead of rendering the 404 page as Markdown.
