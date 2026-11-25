@@ -2,6 +2,14 @@
 
 Newest first. One entry per run.
 
+## 2026-11-25 — "Let's talk." opens on the width axis as it scrolls in
+- **Category:** motion & transitions (backlog #4)
+- **What:** The home page's closing heading now has its own scroll-driven moment: as "Let's talk." rises from the bottom edge it opens from condensed and light (62%, weight 500) to its full wide, heavy setting (125% desktop / 90% phone, weight 750), finishing 240px of scroll later. It uses the heading's own `view()` timeline, so on desktop (where the heading is bottom-aligned in its block) the motion happens while it is actually on screen; at the end of the page the heading sits about 300px (desktop) / 560px (phone) above the bottom edge, so it always completes. The heading's box doesn't change height, so nothing moves around it. Pure CSS; without `animation-timeline` support or under reduced motion it is static at full width, and it is readable at every point of the animation.
+- **PR:** https://github.com/thomasjmann23/thomasjmann23.github.io/pull/27.
+- **Checks:** tools/check.py all pages at 1440/390: ALL CHECKS PASSED (home CLS 0.001 / 0.001). Extra Playwright pass at 1440×900, 1440×1400, 1024×768 and 390×844: stretch measured at 40/120/200/280 px into the scroll and at the page end (completes at every size; heading height constant); reduced motion stays at full width. Mid-scroll and end screenshots reviewed. Full-page screenshots show the heading condensed (they're captured from the top of the page). No new controls; colours unchanged (contrast unchanged). Lighthouse not re-run (CSS-only motion).
+- **Preview:** not republished (optional).
+- **Suggested next:** performance (backlog #3, SVG figure dimensions) or SEO/meta (backlog #4), which haven't run for a while; content #1 needs repo access beyond this site's repo.
+
 ## 2026-11-25 — Research: AI-forged documents in small-business lending
 - **Category:** research (scheduled research task)
 - **What:** New study `ai-forged-documents-small-business-lending` (~5,400 words, 33 sources, 4 SVG figures, 1 table): FinCEN's deepfake alert and FBI warning; vendor-reported fraud rates (Inscribe, Resistant AI, Ocrolus) and why they are not comparable; the shift to template and serial fraud; the only controlled test of human reviewers (Ren et al., 2026); detection methods and DocTamper; the CBA case; SOP 50 10 8.1 tax-transcript rules, SBA OIG 26-12 and GAO-27-107701; implications for lenders. Queue was empty, so the run chose the topic and listed two further proposals in the queue.
