@@ -8,7 +8,7 @@ Newest first. One entry per run.
 - **PR:** see the PR for daily/2026-11-25-lets-talk-width.
 - **Checks:** tools/check.py all pages at 1440/390: ALL CHECKS PASSED (home CLS 0.001 / 0.001). Extra Playwright pass at 1440×900, 1440×1400, 1024×768 and 390×844: stretch measured at 40/120/200/280 px into the scroll and at the page end (completes at every size; heading height constant); reduced motion stays at full width. Mid-scroll and end screenshots reviewed. Full-page screenshots show the heading condensed (they're captured from the top of the page). No new controls; colours unchanged (contrast unchanged). Lighthouse not re-run (CSS-only motion).
 - **Preview:** not republished (optional).
-- **Suggested next:** performance (backlog #2, SVG figure dimensions) or accessibility/SEO, which haven't run for a while; content #1 needs repo access beyond this site's repo.
+- **Suggested next:** performance (backlog #3, SVG figure dimensions) or SEO/meta (backlog #4), which haven't run for a while; content #1 needs repo access beyond this site's repo.
 
 ## 2026-11-25 — Research: AI-forged documents in small-business lending
 - **Category:** research (scheduled research task)
