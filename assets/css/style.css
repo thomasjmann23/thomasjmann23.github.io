@@ -481,6 +481,16 @@ kbd { font: 500 11px var(--mono); padding: 1px 5px; border-radius: 3px; border: 
 .contact h2 { font-size: clamp(40px, 6.4vw, 92px); line-height: .9; font-weight: 750; font-stretch: 125%; letter-spacing: -.045em; }
 .contact p { color: var(--muted); margin-bottom: 24px; font-size: 17px; }
 .contact .email { font: 500 16px var(--mono); display: block; margin-bottom: 20px; color: var(--ink); user-select: all; }
+/* Closing moment: "Let's talk." opens from condensed to its full width on Archivo's width axis as it
+   scrolls up from the bottom edge, finishing 240px later (it always gets there: at the end of the page the
+   heading sits at least ~300px above the bottom). The heading's box doesn't change size, so nothing around
+   it moves. Static at full width without support or under reduced motion. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .contact h2 { animation: talk linear both; animation-timeline: view(); animation-range: entry 0% entry calc(100% + 240px); }
+    @keyframes talk { from { font-stretch: 62%; font-weight: 500; letter-spacing: -.02em; } }
+  }
+}
 .contact .copy-status { position: absolute; top: 100%; left: 0; margin: 12px 0 0; font: 13px var(--mono); color: var(--accent); }
 .footer { margin-top: 96px; padding: 24px 0 48px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font: 12.5px var(--mono); color: var(--faint); }
 

@@ -6,7 +6,7 @@ Pick from the top unless yesterday's log suggests something better. Rotate categ
 1. **Content:** each project detail page could show "What I'd do next" or "What it taught me", only from what the repo shows.
 2. **Project showcases:** a similar replay for another project (e.g. the SBA FOIA analyzer), only if its repo supports the steps shown.
 3. **Performance:** research article SVG figures have no width/height in the Markdown; they haven't shifted in tests (they load ahead of the reader), but on a very slow connection they could. If it shows up, set dimensions from each SVG's viewBox after render.
-4. **Motion:** "Let's talk." could open from condensed to wide on Archivo's width axis as it scrolls into view (scroll-driven, static under reduced motion), as the home page's closing moment.
+4. **SEO/meta:** audit structured data (Person JSON-LD) and per-page descriptions against resume.json; check the research articles have their own titles and OG data.
 
 ## Questions for Thomas
 - The site now offers a one-page PDF résumé built from the site's data. Happy with it as your public CV, or would you rather it link to a version you maintain?
