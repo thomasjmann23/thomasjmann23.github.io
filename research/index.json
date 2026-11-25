@@ -1,6 +1,21 @@
 {
   "items": [
     {
+      "id": "ai-forged-documents-small-business-lending",
+      "title": "AI-forged documents in small-business lending: how big the problem is and what still works",
+      "date": "2026-11-25",
+      "status": "Complete",
+      "summary": "What regulators, auditors, researchers and detection vendors have published on AI-assisted forgery of bank statements, tax returns and identity documents in small-business and SBA lending. Every prevalence figure is a vendor's own, human reviewers caught little in the one controlled test, and source data such as IRS transcripts remains the strongest control.",
+      "tags": [
+        "AI in lending",
+        "Document fraud",
+        "SBA",
+        "Small business",
+        "Verification"
+      ],
+      "file": "research/ai-forged-documents-small-business-lending/index.md"
+    },
+    {
       "id": "small-business-borrower-information-ai",
       "title": "What AI tells small-business borrowers: loan information, pricing and fair lending",
       "date": "2026-11-22",

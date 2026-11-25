@@ -2,6 +2,11 @@
 
 Newest first. One entry per run.
 
+## 2026-11-25 — Research: AI-forged documents in small-business lending
+- **Category:** research (scheduled research task)
+- **What:** New study `ai-forged-documents-small-business-lending` (~5,400 words, 33 sources, 4 SVG figures, 1 table): FinCEN's deepfake alert and FBI warning; vendor-reported fraud rates (Inscribe, Resistant AI, Ocrolus) and why they are not comparable; the shift to template and serial fraud; the only controlled test of human reviewers (Ren et al., 2026); detection methods and DocTamper; the CBA case; SOP 50 10 8.1 tax-transcript rules, SBA OIG 26-12 and GAO-27-107701; implications for lenders. Queue was empty, so the run chose the topic and listed two further proposals in the queue.
+- **Checks:** tools/check.py ALL CHECKS PASSED (article at 1440/390); figures and table inspected at both widths.
+
 ## 2026-11-24 — Contact block: one button row, heading on the baseline
 - **Category:** design polish (backlog #3, then a polish fix)
 - **Grain seam (backlog #3):** checked in real scrolling with Playwright at 390 and 1440 on the longest article (top, middle, bottom): the fixed grain covers every viewport evenly. The seam only appears in `full_page` screenshots, which paint fixed layers once over the first viewport. Not visible to visitors; closed with no change.
