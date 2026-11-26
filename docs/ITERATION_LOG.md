@@ -2,6 +2,15 @@
 
 Newest first. One entry per run.
 
+## 2026-11-26 — Per-page meta, article/project structured data, sitemap
+- **Category:** SEO/meta (backlog #4)
+- **Audit:** Person JSON-LD (home) is built from resume.json and matches it; static pages have their own titles, descriptions, canonical and OG tags. Gaps: every project page and research article shared the generic description ("Project detail." for projects), canonical and og:url of `project.html` / `research.html`, so search engines saw 7 projects and 7 studies as duplicates of two URLs; no item-level structured data; no sitemap.xml or robots.txt.
+- **What:** `site.js` now sets each project's and article's title, meta description, canonical, og:title/description/url (and og:type `article` for studies) from resume.json / research/index.json, and adds JSON-LD: `CreativeWork` per project and `Article` per study (headline, summary, date, tags, author linked to the home page's Person via `@id`). Unknown ids get `noindex` and fall back to the list page's canonical. New `tools/make_sitemap.py` writes `sitemap.xml` (4 pages, every project, every study with its date as lastmod); `robots.txt` points to it; `check.py` fails if the sitemap is stale and checks that the project and newest article pages carry their own canonical and valid JSON-LD. RESEARCH_CONTRACT.md tells the research agent to re-run the sitemap script. Static project.html description improved. Link-preview bots that don't run JS still get each page's generic OG tags (fixing that would need a static page per item).
+- **PR:** see the PR for daily/2026-11-26-seo-meta.
+- **Checks:** tools/check.py all pages at 1440/390: ALL CHECKS PASSED (incl. the new meta/sitemap checks). Playwright pass on home, a project, an article and unknown ids for both: values correct, no console errors. Screenshots unchanged (no visual change). Lighthouse (mobile): home 97/100/100/100, project page 98/100/100/100.
+- **Preview:** not republished (optional).
+- **Suggested next:** performance (backlog #3, SVG figure dimensions) or design polish; content #1 and showcases #2 need repo access beyond this site's repo.
+
 ## 2026-11-25 — "Let's talk." opens on the width axis as it scrolls in
 - **Category:** motion & transitions (backlog #4)
 - **What:** The home page's closing heading now has its own scroll-driven moment: as "Let's talk." rises from the bottom edge it opens from condensed and light (62%, weight 500) to its full wide, heavy setting (125% desktop / 90% phone, weight 750), finishing 240px of scroll later. It uses the heading's own `view()` timeline, so on desktop (where the heading is bottom-aligned in its block) the motion happens while it is actually on screen; at the end of the page the heading sits about 300px (desktop) / 560px (phone) above the bottom edge, so it always completes. The heading's box doesn't change height, so nothing moves around it. Pure CSS; without `animation-timeline` support or under reduced motion it is static at full width, and it is readable at every point of the animation.
