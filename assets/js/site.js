@@ -171,10 +171,23 @@
   }
 
   // Structured data for search engines, built from resume.json so facts live in one place
+  const SITE = 'https://thomasjmann23.github.io/', PERSON_ID = SITE + '#person';
+  const addLd = ld => document.head.append(h('script', { type: 'application/ld+json', text: JSON.stringify({ '@context': 'https://schema.org', ...ld }) }));
+  const author = d => ({ '@type': 'Person', '@id': PERSON_ID, name: d.name, url: SITE });
+  // Detail pages share one HTML file, so their title, description, canonical and OG tags are set per item
+  // (search engines render JS; link-preview bots that don't still get the page's generic tags)
+  function setMeta({ title, description, path, type, noindex }) {
+    const url = path && SITE + path, set = (sel, v) => { const el = $(sel); if (el && v) el.setAttribute(el.tagName === 'LINK' ? 'href' : 'content', v); };
+    document.title = title;
+    set('meta[name="description"]', description); set('meta[property="og:description"]', description);
+    set('meta[property="og:title"]', title); set('meta[property="og:url"]', url); set('meta[property="og:type"]', type);
+    set('link[rel="canonical"]', url);
+    if (noindex) document.head.append(h('meta', { name: 'robots', content: 'noindex' }));
+  }
   function personSchema(d) {
     const job = d.experience[0];
     const ld = {
-      '@context': 'https://schema.org', '@type': 'Person',
+      '@context': 'https://schema.org', '@type': 'Person', '@id': PERSON_ID,
       name: d.name, alternateName: d.shortName, url: 'https://thomasjmann23.github.io/',
       jobTitle: job.role, worksFor: { '@type': 'Organization', name: job.org },
       homeLocation: { '@type': 'Place', name: d.location },
@@ -377,12 +390,15 @@
     const list = d.projects, i = list.findIndex(p => p.id === params.get('id'));
     const host = $('[data-render="project"]');
     if (i < 0) {
+      setMeta({ title: 'Project not found · Thomas Mann', noindex: true });
       host.replaceChildren(h('div', { class: 'detail-hero' }, h('a', { class: 'back', href: 'projects.html' }, arrow('←'), 'All projects'),
         h('h1', { class: 'page-title', text: 'Project not found.' })));
       return;
     }
     const p = list[i], prev = list[(i - 1 + list.length) % list.length], next = list[(i + 1) % list.length];
-    document.title = `${p.name} · Thomas Mann`;
+    const path = `project.html?id=${encodeURIComponent(p.id)}`;
+    setMeta({ title: `${p.name} · Thomas Mann`, description: `${p.tagline}. ${p.description}`, path });
+    addLd({ '@type': 'CreativeWork', name: p.name, description: p.description, url: SITE + path, keywords: p.skills.join(', '), creator: author(d) });
     host.replaceChildren(
       h('header', { class: 'detail-hero' },
         h('a', { class: 'back enter', href: 'projects.html' }, arrow('←'), 'All projects'),
@@ -498,7 +514,8 @@
   function renderResearch(d) {
     const host = $('[data-render="research"]'), items = d.research, id = params.get('id');
     const item = id && items.find(x => x.id === id);
-    if (item) return renderArticle(host, item);
+    if (item) return renderArticle(host, item, d);
+    if (id) setMeta({ title: 'Research · Thomas Mann', noindex: true });
     host.replaceChildren(
       h('header', { class: 'wrap page-head' },
         h('p', { class: 'label enter', text: 'Research' }),
@@ -517,8 +534,11 @@
               h('p', { text: 'Research projects will appear here as they are completed.' }))));
   }
 
-  async function renderArticle(host, item) {
-    document.title = `${item.title} · Thomas Mann`;
+  async function renderArticle(host, item, d) {
+    const path = `research.html?id=${encodeURIComponent(item.id)}`;
+    setMeta({ title: `${item.title} · Thomas Mann`, description: item.summary, path, type: 'article' });
+    addLd({ '@type': 'Article', headline: item.title, description: item.summary, url: SITE + path, mainEntityOfPage: SITE + path,
+      datePublished: item.date, keywords: (item.tags || []).join(', '), author: author(d), image: SITE + 'assets/og.png' });
     host.replaceChildren(h('article', { class: 'wrap' },
       h('header', { class: 'detail-hero' },
         h('a', { class: 'back enter', href: 'research.html' }, arrow('←'), 'All research'),

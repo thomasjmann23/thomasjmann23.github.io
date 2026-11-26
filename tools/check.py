@@ -6,7 +6,8 @@ With no URL it serves the repo locally. For each page and width (1440, 390):
 console errors, layout shift, horizontal overflow, alt text, named controls,
 one h1, no skipped heading levels, rendered content (incl. the newest research article), page weight. Also: light + reduced-motion pass,
 command menu opens with Ctrl+K and navigates, theme toggle works,
-résumé PDF is current (tools/resume_pdf.stamp) and its download link works.
+résumé PDF is current (tools/resume_pdf.stamp) and its download link works,
+sitemap.xml is current (tools/make_sitemap.py), detail pages set their own meta + JSON-LD.
 Screenshots go to tools/shots/. Exits 1 if anything fails.
 Needs `pip install playwright`; set PLAYWRIGHT_BROWSERS_PATH=/opt/pw-browsers if Chromium lives there.
 """
@@ -162,6 +163,21 @@ def main():
         if errs:
             problems.append(f"interaction errors: {errs}")
 
+        # Detail pages: own description/canonical and parseable structured data
+        for name in ("project", "article"):
+            if name not in pages():
+                continue
+            pg.goto(base + pages()[name][0], wait_until="networkidle")
+            pg.wait_for_timeout(300)
+            m = pg.evaluate("""() => ({
+                desc: document.querySelector('meta[name=description]').content,
+                canon: document.querySelector('link[rel=canonical]').href,
+                ld: [...document.querySelectorAll('script[type="application/ld+json"]')].map(s => { try { return JSON.parse(s.textContent)['@type'] } catch (e) { return 'INVALID' } })
+            })""")
+            want = {"project": "CreativeWork", "article": "Article"}[name]
+            if "?id=" not in m["canon"] or m["desc"].startswith("A project by") or want not in m["ld"] or "INVALID" in m["ld"]:
+                problems.append(f"{name}: per-item meta/JSON-LD missing ({m})")
+
         # Résumé PDF: shown on the real site and served
         pg.goto(base + "work.html", wait_until="networkidle")
         link = pg.locator("[data-resume] a[download]")
@@ -177,6 +193,10 @@ def main():
     want = hashlib.sha256((ROOT / "content/resume.json").read_bytes()).hexdigest()
     if not stamp.exists() or stamp.read_text().strip() != want:
         problems.append("résumé PDF is stale: run python3 tools/make_resume_pdf.py")
+    sys.path.insert(0, str(ROOT / "tools"))
+    import make_sitemap
+    if not make_sitemap.is_current():
+        problems.append("sitemap.xml is stale: run python3 tools/make_sitemap.py")
     print("\n".join(problems) if problems else "ALL CHECKS PASSED")
     sys.exit(1 if problems else 0)
 

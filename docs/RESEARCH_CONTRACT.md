@@ -37,5 +37,6 @@ research/
 
 ## Rules
 - Same content rules as the rest of the site (`docs/DAILY_INSTRUCTIONS.md`): true, no confidential employer or client data, no personal info beyond what's allowed.
+- After adding or removing a study, run `python3 tools/make_sitemap.py` so `sitemap.xml` lists it (`check.py` fails otherwise).
 - Publish through a PR to `main`. Run `python3 tools/check.py` and open `research.html?id=<id>` in the screenshots before merging.
 - After merging, republish the private preview (`python3 tools/build_preview.py`, which includes research Markdown files).
