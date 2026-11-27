@@ -91,7 +91,10 @@
   const MD_LIBS = ['https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js', 'https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js'];
   let mdLibs = null;
   const loadMdLibs = () => (mdLibs ||= Promise.all(MD_LIBS.map(loadScript)));
-  if (page === 'research' && params.get('id')) loadMdLibs().catch(() => {});
+  // research/figures.json (tools/make_figures.py) holds each article image's size, so figures reserve their space
+  let figDims = null;
+  const loadFigDims = () => (figDims ||= getJSON('research/figures.json').catch(() => ({})));
+  if (page === 'research' && params.get('id')) { loadMdLibs().catch(() => {}); loadFigDims(); }
   Promise.all([getJSON('content/resume.json'), getJSON('research/index.json').catch(() => ({ items: [] }))])
     .then(([d, research]) => {
       d.research = (research && research.items) || [];
@@ -549,8 +552,16 @@
       h('div', { class: 'prose enter', style: '--d:2', 'aria-busy': 'true' }, h('p', { class: 'prose-wait', text: 'Loading…' }))));
     const prose = $('.prose', host);
     try {
-      const [md] = await Promise.all([fetch(item.file).then(r => { if (!r.ok) throw new Error(item.file + ' ' + r.status); return r.text(); }), loadMdLibs()]);
+      const [md, , dims] = await Promise.all([fetch(item.file).then(r => { if (!r.ok) throw new Error(item.file + ' ' + r.status); return r.text(); }), loadMdLibs(), loadFigDims()]);
       prose.innerHTML = window.DOMPurify.sanitize(window.marked.parse(md));
+      // Same task as the insert, so the first layout already has each figure's box: nothing below it moves when it
+      // loads, and it can wait until the reader is near it
+      for (const img of prose.querySelectorAll('img')) {
+        const wh = dims[img.getAttribute('src')];
+        if (!wh || img.hasAttribute('width')) continue;
+        img.width = wh[0]; img.height = wh[1];
+        img.loading = 'lazy'; img.decoding = 'async';
+      }
     } catch (e) { prose.textContent = 'Could not load this article.'; console.warn(e); }
     prose.removeAttribute('aria-busy');
   }
