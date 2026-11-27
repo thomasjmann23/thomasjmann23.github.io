@@ -7,7 +7,7 @@ console errors, layout shift, horizontal overflow, alt text, named controls,
 one h1, no skipped heading levels, rendered content (incl. the newest research article), page weight. Also: light + reduced-motion pass,
 command menu opens with Ctrl+K and navigates, theme toggle works,
 résumé PDF is current (tools/resume_pdf.stamp) and its download link works,
-sitemap.xml is current (tools/make_sitemap.py), detail pages set their own meta + JSON-LD.
+sitemap.xml and research/figures.json are current (tools/make_sitemap.py, tools/make_figures.py), detail pages set their own meta + JSON-LD.
 Screenshots go to tools/shots/. Exits 1 if anything fails.
 Needs `pip install playwright`; set PLAYWRIGHT_BROWSERS_PATH=/opt/pw-browsers if Chromium lives there.
 """
@@ -197,6 +197,9 @@ def main():
     import make_sitemap
     if not make_sitemap.is_current():
         problems.append("sitemap.xml is stale: run python3 tools/make_sitemap.py")
+    import make_figures
+    if not make_figures.is_current():
+        problems.append("research/figures.json is stale: run python3 tools/make_figures.py")
     print("\n".join(problems) if problems else "ALL CHECKS PASSED")
     sys.exit(1 if problems else 0)
 

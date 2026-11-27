@@ -2,6 +2,15 @@
 
 Newest first. One entry per run.
 
+## 2026-11-27 — Research figures reserve their space while loading
+- **Category:** performance (backlog #3)
+- **Problem confirmed:** with the SVG figures held back (slow connection) and the reader already scrolled to the first figure, five of seven articles shifted on phones when the figure arrived (CLS 0.078–0.114, above the 0.1 limit on two) and one on desktop (0.046): the Markdown images had no width/height, so they were 0px tall until loaded.
+- **What:** New `tools/make_figures.py` writes `research/figures.json` (path → [width, height] for every image an article uses; SVG viewBox, PNG/WebP/JPEG headers; 29 figures today, 2 KB). `site.js` fetches it in parallel with the article's Markdown and libraries (no extra wait) and, in the same task that inserts the body, gives each figure its `width`/`height` plus `loading="lazy"` and `decoding="async"`, so the first layout already has every figure's box and figures further down only load as the reader nears them. Images missing from the manifest render as before. `check.py` fails if `figures.json` is stale; RESEARCH_CONTRACT.md tells the research agent to run the script alongside `make_sitemap.py`. No Markdown edited; rendered sizes unchanged.
+- **PR:** https://github.com/thomasjmann23/thomasjmann23.github.io/pull/29.
+- **Checks:** tools/check.py all pages at 1440/390: ALL CHECKS PASSED (article CLS 0.000). Slow-figure test, all seven articles: CLS 0 at 390 and 1440 (was up to 0.114); only 1–2 of 4–5 figures fetched on first view. Scrolled every article at both widths: every figure loads, aspect ratio exact, no console errors. Dark-mode phone screenshot of a figure reviewed. No new controls; colours unchanged. Lighthouse (mobile) on an article, alternating with main: 97/96 vs main 96/97 (noise), Accessibility/Best Practices/SEO 100.
+- **Preview:** not republished (optional).
+- **Suggested next:** design polish or motion (haven't run since 11-24/11-25); content #1 and showcases #2 still need repo access beyond this site's repo.
+
 ## 2026-11-26 — Per-page meta, article/project structured data, sitemap
 - **Category:** SEO/meta (backlog #4)
 - **Audit:** Person JSON-LD (home) is built from resume.json and matches it; static pages have their own titles, descriptions, canonical and OG tags. Gaps: every project page and research article shared the generic description ("Project detail." for projects), canonical and og:url of `project.html` / `research.html`, so search engines saw 7 projects and 7 studies as duplicates of two URLs; no item-level structured data; no sitemap.xml or robots.txt.

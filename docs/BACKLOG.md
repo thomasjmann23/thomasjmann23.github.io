@@ -5,8 +5,8 @@ Pick from the top unless yesterday's log suggests something better. Rotate categ
 ## Up next
 1. **Content:** each project detail page could show "What I'd do next" or "What it taught me", only from what the repo shows.
 2. **Project showcases:** a similar replay for another project (e.g. the SBA FOIA analyzer), only if its repo supports the steps shown.
-3. **Performance:** research article SVG figures have no width/height in the Markdown; they haven't shifted in tests (they load ahead of the reader), but on a very slow connection they could. If it shows up, set dimensions from each SVG's viewBox after render.
-4. **SEO/social:** link-preview bots (LinkedIn, Slack) don't run JS, so shared project/article links show the generic card. Option: a tiny static stub page per study/project (generated like the sitemap) with its own OG tags that redirects to the real page; weigh against "no build step".
+3. **SEO/social:** link-preview bots (LinkedIn, Slack) don't run JS, so shared project/article links show the generic card. Option: a tiny static stub page per study/project (generated like the sitemap) with its own OG tags that redirects to the real page; weigh against "no build step".
+4. **Motion/design:** research figures could draw in (bars grow, lines stroke) as they scroll into view; would need inline SVG instead of <img>, so weigh against keeping the research agent's files untouched.
 
 ## Questions for Thomas
 - The site now offers a one-page PDF résumé built from the site's data. Happy with it as your public CV, or would you rather it link to a version you maintain?
