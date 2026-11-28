@@ -527,12 +527,19 @@
       h('section', { class: 'wrap', 'aria-labelledby': 'studies-h' },
         h('h2', { class: 'sr-only', id: 'studies-h', text: 'Studies' }),
         items.length
-          ? h('div', { class: 'cards' }, items.map(x => h('a', { class: 'card reveal r-card', href: `research.html?id=${encodeURIComponent(x.id)}` },
-              h('span', { class: 'meta', text: [x.date, x.status].filter(Boolean).join(' · ') }),
-              h('h3', { text: x.title, style: `view-transition-name: r-${x.id}` }),
-              h('p', { text: x.summary }),
-              x.tags ? h('ul', { class: 'chips' }, x.tags.map(t => h('li', { class: 'chip', text: t }))) : null,
-              h('span', { class: 'go' }, h('span', { text: 'Read' }), arrow()))))
+          // a ledger, newest first: the latest study leads, older ones are ruled rows with a file number
+          ? h('ol', { class: 'r-index' }, items.map((x, i) => h('li', { class: i ? 'reveal' : 'lead reveal' },
+              h('a', { class: 'card r-card', href: `research.html?id=${encodeURIComponent(x.id)}` },
+                h('span', { class: 'meta' },
+                  h('span', { class: 'no', text: `No. ${String(items.length - i).padStart(2, '0')}` }),
+                  x.date ? h('span', { text: x.date }) : null,
+                  x.status ? h('span', { class: 'st', text: x.status }) : null),
+                h('div', { class: 'body' },
+                  h('h3', { text: x.title, style: `view-transition-name: r-${x.id}` }),
+                  h('p', { text: x.summary })),
+                h('div', { class: 'side' },
+                  x.tags ? h('ul', { class: 'chips' }, x.tags.map(t => h('li', { class: 'chip', text: t }))) : null,
+                  h('span', { class: 'go' }, h('span', { text: 'Read' }), arrow()))))))
           : h('div', { class: 'empty enter', style: '--d:3' }, h('h2', { text: 'First studies in progress' }),
               h('p', { text: 'Research projects will appear here as they are completed.' }))));
   }

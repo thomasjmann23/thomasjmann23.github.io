@@ -37,7 +37,7 @@ def pages():
         "work": ("work.html", ".job"),
         "projects": ("projects.html", ".cards .card"),
         "project": (f"project.html?id={first}", ".pipeline li"),
-        "research": ("research.html", ".page-head h1"),
+        "research": ("research.html", ".r-index .r-card"),
         **article,
     }
 

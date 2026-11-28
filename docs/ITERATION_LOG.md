@@ -2,6 +2,15 @@
 
 Newest first. One entry per run.
 
+## 2026-11-28 — Research index as a ledger
+- **Category:** design polish
+- **Problem:** with eight studies, the Research page was eight identical three-column cards (a template tell under the design rules) and 4,170px tall on phones; the newest study looked no different from the oldest.
+- **What:** The list is now an ordered ledger, newest first. The latest study leads: ink rule above, cobalt file number, title at up to 56px, full summary. Older studies are ruled rows like a credit file index: mono column with "No. 07", date and status; title and summary in the middle; tags and "Read →" on the right. Each title keeps its `r-<id>` name, so the morph into the article header is unchanged, and keeps the width-axis hover (112% on rows, 108% on the lead). Under 960px the tags drop under the text; on phones the meta sits on one line, older rows show a 3-line summary and no tags (full text stays in the DOM and on the article), so the page is 2,813px instead of 4,170px. Class is `.r-index` (`.ledger` was already taken by the home page). `check.py` now counts the rendered rows on the Research page instead of only checking the heading.
+- **PR:** see the PR for daily/2026-11-28-research-ledger.
+- **Checks:** tools/check.py all pages at 1440/390: ALL CHECKS PASSED (research CLS 0.000, 8 rows rendered at both widths). Screenshots at 1440 light/dark, 1024 and 390 light/dark reviewed: nothing clipped or overlapping, no horizontal overflow, no console errors. Keyboard: Tab reaches each row with the 2px cobalt ring; Enter opens the article. Colours are existing tokens (contrast unchanged). Lighthouse (mobile) on research.html: 99/100/100/100; home 97/100/100/100.
+- **Preview:** not republished (optional).
+- **Suggested next:** motion & transitions or accessibility (neither has run since 11-25/11-20); content #1 and showcases #2 still need repo access beyond this site's repo.
+
 ## 2026-11-28 — Research: cash-flow underwriting for small business
 - **Category:** research (scheduled research task)
 - **What:** New study `cash-flow-underwriting-small-business` (~5,700 words, 33 sources, 4 SVG figures, 1 table): FinRegLab's 2025 small-business study and NBER w33367 (AUC gains of 0.011–0.017, larger for young and low-score owners); Experian, Plaid, FICO and Nova Credit products and their self-reported claims; Section 1033's consumer-only scope, injunction and 2026 reconsideration; JPMorgan's aggregator fees; SBA's March 2026 SBSS sunset and two-month statement rule; 2025–2026 fair-lending changes (Circular 2022-03 withdrawn, Reg B, Section 1071). Queue was empty, so the run took a 2026-11-25 proposal and listed three new ones in the queue.
