@@ -1,6 +1,22 @@
 {
   "items": [
     {
+      "id": "cash-flow-underwriting-small-business",
+      "title": "Cash-flow underwriting for small business: the evidence, the vendors and the data-access gap",
+      "date": "2026-11-28",
+      "status": "Complete",
+      "summary": "What public research, vendors and regulators say about underwriting small-business loans from bank-account data. Independent studies find modest gains concentrated in young, low-score firms; vendor claims are far larger and unverified; and business accounts have no federal data-access right.",
+      "tags": [
+        "AI in lending",
+        "Cash-flow underwriting",
+        "Open banking",
+        "SBA",
+        "Small business",
+        "Fair lending"
+      ],
+      "file": "research/cash-flow-underwriting-small-business/index.md"
+    },
+    {
       "id": "ai-forged-documents-small-business-lending",
       "title": "AI-forged documents in small-business lending: how big the problem is and what still works",
       "date": "2026-11-25",

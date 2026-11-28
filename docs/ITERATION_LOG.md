@@ -2,6 +2,11 @@
 
 Newest first. One entry per run.
 
+## 2026-11-28 — Research: cash-flow underwriting for small business
+- **Category:** research (scheduled research task)
+- **What:** New study `cash-flow-underwriting-small-business` (~5,700 words, 33 sources, 4 SVG figures, 1 table): FinRegLab's 2025 small-business study and NBER w33367 (AUC gains of 0.011–0.017, larger for young and low-score owners); Experian, Plaid, FICO and Nova Credit products and their self-reported claims; Section 1033's consumer-only scope, injunction and 2026 reconsideration; JPMorgan's aggregator fees; SBA's March 2026 SBSS sunset and two-month statement rule; 2025–2026 fair-lending changes (Circular 2022-03 withdrawn, Reg B, Section 1071). Queue was empty, so the run took a 2026-11-25 proposal and listed three new ones in the queue.
+- **Checks:** tools/check.py ALL CHECKS PASSED; article, table and figures inspected at 1440 and 390.
+
 ## 2026-11-27 — Research figures reserve their space while loading
 - **Category:** performance (backlog #3)
 - **Problem confirmed:** with the SVG figures held back (slow connection) and the reader already scrolled to the first figure, five of seven articles shifted on phones when the figure arrived (CLS 0.078–0.114, above the 0.1 limit on two) and one on desktop (0.046): the Markdown images had no width/height, so they were 0px tall until loaded.
